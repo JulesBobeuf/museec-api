@@ -75,7 +75,10 @@ public class AuthService implements UserDetailsService {
     
     public String createUser(CreateUserRequest request) {
     	if (! request.getPassword().equals(request.getConfirmPassword())) {
-        	return "Failed to create Users : Passwords don't match";
+        	return "Failed to create User : Passwords don't match";
+    	}
+    	if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        	return "Failed to create User : email already exists";
     	}
     	ApiUser user = CreateUserRequestToApiUserMapper.INSTANCE.createUserRequestToApiUser(request);
     	user.setId(sequenceGeneratorService.generateSequence(ApiUser.SEQUENCE_NAME));
