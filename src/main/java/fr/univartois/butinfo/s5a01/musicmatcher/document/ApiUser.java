@@ -25,11 +25,7 @@ public class ApiUser implements UserDetails {
 	@NotNull
 	private Roles role = Roles.USER;
 	
-	private boolean isOwner;
-	private boolean isEnabled = true;
-	private boolean isAccountNonExpired = false;
-	private boolean isAccountNonLocked = false;
-	private boolean isCredentialsNonExpired = false;
+
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
