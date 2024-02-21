@@ -65,10 +65,9 @@ public class ApiUser implements UserDetails {
 	@NotNull
 	private boolean isLocked;
 	@NotNull
-	private LocalDateTime dateCreation = LocalDateTime.now();
+	private LocalDateTime dateCreation;
 	@NotNull
 	private LocalDateTime dateUpdate = LocalDateTime.now();
-	@NotNull
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -258,6 +257,16 @@ public class ApiUser implements UserDetails {
 
 	public int getId() {
 		return id;
+	}
+	
+	
+
+	public void setDateCreation(LocalDateTime dateCreation) {
+		this.dateCreation = dateCreation;
+	}
+
+	public void setDateUpdate(LocalDateTime dateUpdate) {
+		this.dateUpdate = dateUpdate;
 	}
 
 	public void setId(int id) {

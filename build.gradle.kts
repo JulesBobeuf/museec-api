@@ -31,6 +31,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
+	testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	compileOnly("org.projectlombok:lombok:1.18.30")
 }
 

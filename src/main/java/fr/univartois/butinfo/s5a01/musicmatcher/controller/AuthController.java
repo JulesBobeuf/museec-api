@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "User", description = "Authentication endpoint")
+@Tag(name = "Auth", description = "Authentication endpoint")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -26,7 +26,7 @@ public class AuthController {
 	@Autowired
 	private AuthService authService;
 
-	@Operation(summary = "Change password", description = "Change password.", tags = { "User" })
+	@Operation(summary = "Change password", description = "Change password.", tags = { "Auth" })
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
@@ -36,7 +36,7 @@ public class AuthController {
 		return ResponseEntity.ok(authService.changePassword(dto));
 	}
 
-	@Operation(summary = "register", description = "Create an account", tags = { "User" })
+	@Operation(summary = "register", description = "Create an account", tags = { "Auth" })
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
@@ -46,7 +46,7 @@ public class AuthController {
 		return ResponseEntity.ok(authService.createUser(request));
 	}
 
-	@Operation(summary = "login", description = "Log in!", tags = { "User" })
+	@Operation(summary = "login", description = "Log in!", tags = { "Auth" })
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
