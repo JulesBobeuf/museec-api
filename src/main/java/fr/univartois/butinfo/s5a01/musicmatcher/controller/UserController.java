@@ -28,12 +28,12 @@ public class UserController {
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
-	@GetMapping("/deban")
+	@GetMapping("/unban")
 	@ResponseBody
 	public ResponseEntity<String> unbanUser(@RequestParam int id) {
 		boolean result = userService.unbanUser(id);
 		if (result) {
-			ResponseEntity.ok("User was unbanned");
+			return ResponseEntity.ok("User was unbanned");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found");
 	}
@@ -47,7 +47,7 @@ public class UserController {
 	public ResponseEntity<String> banUser(@RequestParam int id) {
 		boolean result = userService.banUser(id);
 		if (result) {
-			ResponseEntity.ok("User was banned");
+			return ResponseEntity.ok("User was banned");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found");
 	}
