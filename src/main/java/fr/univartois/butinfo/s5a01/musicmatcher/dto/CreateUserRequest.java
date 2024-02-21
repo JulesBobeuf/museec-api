@@ -3,10 +3,10 @@ package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 import java.util.Set;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Roles;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
-import fr.univartois.butinfo.s5a01.musicmatcher.utils.Region;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -35,14 +35,14 @@ public class CreateUserRequest {
 	@NotNull
 	private Set<MusicStyle> musicStyles;
 	@NotNull
-	private Region region;
+	private Country country;
 	@NotNull
 	private Roles role;
 	@NotNull
 	private String email;
 	@NotNull
 	private String password;
-	
+	@NotNull
 	private String confirmPassword;
 	
 	public CreateUserRequest() {
@@ -129,12 +129,12 @@ public class CreateUserRequest {
 		this.musicStyles = musicStyles;
 	}
 
-	public Region getRegion() {
-		return region;
+	public Country getCountry() {
+		return country;
 	}
 
-	public void setRegion(Region region) {
-		this.region = region;
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 
 	public Roles getRole() {
