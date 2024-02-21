@@ -1,0 +1,58 @@
+package fr.univartois.butinfo.s5a01.musicmatcher.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.AuthenticationRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.ChangePasswordDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "User", description = "Authentication endpoint")
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+	@Autowired
+	private AuthService authService;
+
+	@Operation(summary = "Change password", description = "Change password.", tags = { "User" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PostMapping("/changepswrd")
+	@ResponseBody
+	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto dto) {
+		return ResponseEntity.ok(authService.changePassword(dto));
+	}
+
+	@Operation(summary = "register", description = "Create an account", tags = { "User" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PostMapping("/createuser")
+	@ResponseBody
+	public ResponseEntity<String> register(@RequestBody CreateUserRequest request) {
+		return ResponseEntity.ok(authService.createUser(request));
+	}
+
+	@Operation(summary = "login", description = "Log in!", tags = { "User" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PostMapping("/login")
+	@ResponseBody
+	public ResponseEntity<String> login(@RequestBody AuthenticationRequest request) {
+	    return ResponseEntity.ok(authService.login(request));
+	}
+}
