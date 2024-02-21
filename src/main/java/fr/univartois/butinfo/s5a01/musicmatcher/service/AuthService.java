@@ -12,30 +12,36 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import fr.univartois.butinfo.s5a01.musicmatcher.auth.JwtService;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.AuthenticationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ChangePasswordDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
-import fr.univartois.butinfo.s5a01.musicmatcher.repository.AuthRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUserRequestToApiUserMapper;
+import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 
 @Service
 public class AuthService implements UserDetailsService {
 
 	@Autowired
-	private AuthRepository authRepository;
+	private UserRepository userRepository;
 
 	@Autowired 
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private fr.univartois.butinfo.s5a01.musicmatcher.auth.JwtService jwtService;
+	private JwtService jwtService;
+	
+	@Autowired
+	private SequenceGeneratorService sequenceGeneratorService;
 	
 	/*
-	 * email
+	 * findByEmail
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<ApiUser> optionalUser = authRepository.findById(username);
+		System.out.println(username);
+		Optional<ApiUser> optionalUser = userRepository.findByEmail(username);
 		if (optionalUser.isPresent()) {
 			return optionalUser.get();
 		} else {
@@ -63,25 +69,31 @@ public class AuthService implements UserDetailsService {
 
         // Il faut mettre à jour l'utilisateur maintenant.
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        authRepository.save(user);
-		return "Password saved sucessfully";
+        userRepository.save(user);
+		return "Password changed sucessfully";
     }
     
     public String createUser(CreateUserRequest request) {
-    	ApiUser user = new ApiUser();
-    	user.setUsername(request.getUsername());
-    	user.setEmail(request.getEmail());
+    	if (! request.getPassword().equals(request.getConfirmPassword())) {
+        	return "Failed to create Users : Passwords don't match";
+    	}
+    	ApiUser user = CreateUserRequestToApiUserMapper.INSTANCE.createUserRequestToApiUser(request);
+    	user.setId(sequenceGeneratorService.generateSequence(ApiUser.SEQUENCE_NAME));
     	user.setPassword(passwordEncoder.encode(request.getPassword()));
-    	user.isAnAdmin(request.isAdmin());
-    	authRepository.save(user);
+    	userRepository.save(user);
     	return "User created successfully";
     }
     
     public String login(AuthenticationRequest request) {
+    	System.out.println("yi");
     	UserDetails user = loadUserByUsername(request.getEmail());
+    	System.out.println(request.getEmail());
     	if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+    	    System.out.println("ts");
+
     	    Authentication authentication = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
     	    SecurityContextHolder.getContext().setAuthentication(authentication);
+    	    System.out.println("ts");
     	    String jwt = jwtService.generateToken(user);
             return jwt;
     	}
