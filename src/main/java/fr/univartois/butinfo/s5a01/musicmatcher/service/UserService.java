@@ -67,6 +67,9 @@ public class UserService {
 		return ApiUserToApiUserDtoMapper.INSTANCE.apiUserToApiUserDto(user);
 	}
 	
+    /**
+     * Method that allows to delete a user
+     */
 	public boolean deleteUser(int id, String email) {
 		Optional<ApiUser> optionalUser = userRepository.findById(id);
 		if (optionalUser.isEmpty()) {
