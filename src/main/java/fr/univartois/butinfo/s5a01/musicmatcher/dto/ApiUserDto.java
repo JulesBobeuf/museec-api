@@ -1,93 +1,46 @@
-package fr.univartois.butinfo.s5a01.musicmatcher.document;
+package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Roles;
+import fr.univartois.butinfo.s5a01.musicmatcher.document.History;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 
-@Document
-@Builder
-public class ApiUser implements UserDetails {
-	
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * Name of the sequence in the database.
-	 */
-	public static final String SEQUENCE_NAME = "usersequence";
-	
-	
-	@Id
+public class ApiUserDto {
+
 	private int id;
-	@NotNull
 	private String firstName;
-	@NotNull
 	private String lastName;
-	@NotNull
 	private int age;
-	@NotNull
 	private Gender gender;
-	@NotNull
 	private String profilePicture;
-	@NotNull
 	private String description;
-	@NotNull
 	private boolean isLookingForAGroup;
-	@NotNull
 	private Set<Instrument> instruments;
-	@NotNull
 	private Set<Skill> skills;
-	@NotNull
 	private Set<MusicStyle> musicStyles;
-	@NotNull
 	private List<History> history;
-	
-	@NotNull
-	private Country country;
-	
+	private Country country;	
 	private int idBand;
-	@NotNull
 	private Roles role;
-	@NotNull
 	private String email;
-	@NotNull
-	private String password;
-	@NotNull
 	private boolean isLocked;
-	@NotNull
 	private LocalDateTime dateCreation;
-	@NotNull
 	private LocalDateTime dateUpdate;
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return role.getAuthorities();
+	
+	public List<History> getHistory() {
+		return history;
 	}
 
-	@Override
-	public String getPassword() {
-		return password;
+	public void setHistory(List<History> history) {
+		this.history = history;
 	}
-
-	@Override
-	public String getUsername() {
-		return email;
-	}
-
 
 	public String getEmail() {
 		return email;
@@ -103,10 +56,6 @@ public class ApiUser implements UserDetails {
 	
 	public Roles getRole() {
 		return role;
-	}
-	
-	public void setPassword(String newPass) {
-		this.password=newPass;
 	}
 	
 	public String getFirstName() {
@@ -225,38 +174,9 @@ public class ApiUser implements UserDetails {
 		this.dateUpdate = LocalDateTime.now();
 	}
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return false;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return !isLocked;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return false;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return !isLocked;
-	}
-
 	public int getId() {
 		return id;
 	}
-	
-	public List<History> getHistory() {
-		return history;
-	}
-
-	public void setHistory(List<History> history) {
-		this.history = history;
-	}
-
 
 	public void setDateCreation(LocalDateTime dateCreation) {
 		this.dateCreation = dateCreation;
@@ -269,5 +189,4 @@ public class ApiUser implements UserDetails {
 	public void setId(int id) {
 		this.id = id;
 	}
-
 }
