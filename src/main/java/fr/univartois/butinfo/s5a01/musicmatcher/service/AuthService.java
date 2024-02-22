@@ -92,18 +92,13 @@ public class AuthService implements UserDetailsService {
         	return "Failed to create User : email already exists";
     	}
     	ApiUser user = CreateUserRequestToApiUserMapper.INSTANCE.createUserRequestToApiUser(request);
-    	
-    	user.setId(sequenceGeneratorService.generateSequence(ApiUser.SEQUENCE_NAME));
-    	user.setDateCreation(LocalDateTime.now());
-    	user.setDateUpdate(LocalDateTime.now());
-    	user.setLocked(false);
-    	user.setHistory(new ArrayList<>());
+        user = initUser(user);
     	user.setPassword(passwordEncoder.encode(request.getPassword()));
     	
     	userRepository.save(user);
     	return "User created successfully";
     }
-    
+
     public String login(AuthenticationRequest request) {
     	Optional<ApiUser> optionalUser = userRepository.findByEmail(request.getEmail());
     	if (optionalUser.isEmpty()) {
@@ -121,4 +116,19 @@ public class AuthService implements UserDetailsService {
     	}
     	return "Can't login : wrong credentials";
     }
+    
+    /**
+     * Method that inits some attributes of a user.
+     * @param user
+     * @return the user updated
+     */
+	private ApiUser initUser(ApiUser user) {
+		user.setId(sequenceGeneratorService.generateSequence(ApiUser.SEQUENCE_NAME));
+    	LocalDateTime now = LocalDateTime.now();
+		user.setDateCreation(now);
+    	user.setDateUpdate(now);
+    	user.setLocked(false);
+    	user.setHistory(new ArrayList<>());
+    	return user;
+	}
 }
