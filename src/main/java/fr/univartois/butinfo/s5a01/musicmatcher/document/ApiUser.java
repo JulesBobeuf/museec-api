@@ -2,6 +2,7 @@ package fr.univartois.butinfo.s5a01.musicmatcher.document;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
@@ -52,6 +53,9 @@ public class ApiUser implements UserDetails {
 	private Set<Skill> skills;
 	@NotNull
 	private Set<MusicStyle> musicStyles;
+	@NotNull
+	private List<History> history;
+	
 	@NotNull
 	private Country country;
 	
@@ -221,20 +225,6 @@ public class ApiUser implements UserDetails {
 		this.dateUpdate = LocalDateTime.now();
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	// dont do this, it's for the sake of the project.
-	public void isAnAdmin(boolean isAdmin) {
-		if (isAdmin) {
-			setRole(Roles.ADMINISTRATOR);
-		}
-		else {
-			setRole(Roles.USER);
-		}
-	}
-
 	@Override
 	public boolean isAccountNonExpired() {
 		return false;
@@ -259,7 +249,14 @@ public class ApiUser implements UserDetails {
 		return id;
 	}
 	
-	
+	public List<History> getHistory() {
+		return history;
+	}
+
+	public void setHistory(List<History> history) {
+		this.history = history;
+	}
+
 
 	public void setDateCreation(LocalDateTime dateCreation) {
 		this.dateCreation = dateCreation;
