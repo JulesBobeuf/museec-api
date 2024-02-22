@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-public enum Roles {
-	USER(List.of(Privileges.READ)),
-	ADMINISTRATOR(List.of(Privileges.values()));
+public enum Role {
+	USER(List.of(Privilege.READ)),
+	ADMINISTRATOR(List.of(Privilege.values()));
 	
-	private List<Privileges> privileges;
+	private List<Privilege> privileges;
 	
-	private Roles(List<Privileges> privileges) {
+	private Role(List<Privilege> privileges) {
 		this.privileges = privileges;
 	}
 

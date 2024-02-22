@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import fr.univartois.butinfo.s5a01.musicmatcher.auth.Roles;
+import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
@@ -61,7 +61,7 @@ public class ApiUser implements UserDetails {
 	
 	private int idBand;
 	@NotNull
-	private Roles role;
+	private Role role;
 	@NotNull
 	private String email;
 	@NotNull
@@ -97,11 +97,11 @@ public class ApiUser implements UserDetails {
 		this.email = email;
 	}
 	
-	public void setRole(Roles role) {
+	public void setRole(Role role) {
 		this.role=role;
 	}
 	
-	public Roles getRole() {
+	public Role getRole() {
 		return role;
 	}
 	

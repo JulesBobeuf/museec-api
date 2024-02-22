@@ -2,7 +2,7 @@ package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
 import java.util.Set;
 
-import fr.univartois.butinfo.s5a01.musicmatcher.auth.Roles;
+import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
@@ -37,7 +37,7 @@ public class CreateUserRequest {
 	@NotNull
 	private Country country;
 	@NotNull
-	private Roles role;
+	private Role role;
 	@NotNull
 	private String email;
 	@NotNull
@@ -137,11 +137,11 @@ public class CreateUserRequest {
 		this.country = country;
 	}
 
-	public Roles getRole() {
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(Roles role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 

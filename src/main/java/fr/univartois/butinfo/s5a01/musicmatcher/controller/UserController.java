@@ -6,13 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ApiUserDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.UpdateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,6 +57,38 @@ public class UserController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
+	
+	@Operation(summary = "updateUser", description = "Update a user", tags = { "User" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PutMapping("/{id}")
+	@ResponseBody
+	public ResponseEntity<ApiUserDto> updateUser(Authentication authentication, @PathVariable int id, @RequestBody UpdateUserRequest request) {
+		System.out.println(request);
+		System.out.println(id);
+		ApiUserDto user = userService.updateUser(id, request, authentication.getName());
+		if (user!=null) {
+			return ResponseEntity.ok(user);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	}
+	
+	
+	@Operation(summary = "getUser", description = "Get a user", tags = { "User" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@DeleteMapping("/{id}")
+	@ResponseBody
+	public ResponseEntity<String> deleteUser(@PathVariable int id) {
+		boolean wasDeleted = userService.deleteUser(id);
+		if (wasDeleted) {
+			return ResponseEntity.ok("User was deleted successfully");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found");
+	}
+	
 	
 	@Operation(summary = "banUser", description = "Ban a user", tags = { "User" })
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
