@@ -1,6 +1,7 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,7 @@ public class AuthService implements UserDetailsService {
     	user.setDateCreation(LocalDateTime.now());
     	user.setDateUpdate(LocalDateTime.now());
     	user.setLocked(false);
+    	user.setHistory(new ArrayList<>());
     	user.setPassword(passwordEncoder.encode(request.getPassword()));
     	
     	userRepository.save(user);
