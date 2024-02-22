@@ -41,10 +41,8 @@ public class UserService {
 		ApiUser user = optionalUser.get();
 		
 		// if the user is trying to update a user that is not himself, make sure it's an administrator.
-		System.out.println(id + " " + user.getId());
 		if (! email.equals(user.getEmail())) {
 			Optional<ApiUser> optionalAdminUser = userRepository.findByEmail(email);
-			System.out.println(optionalAdminUser.get().getRole());
 			if (optionalAdminUser.isEmpty()) {
 	            throw new IllegalArgumentException("Forbidden");
 			}
@@ -69,7 +67,7 @@ public class UserService {
 		return ApiUserToApiUserDtoMapper.INSTANCE.apiUserToApiUserDto(user);
 	}
 	
-	public boolean deleteUser(int id) {
+	public boolean deleteUser(int id, String email) {
 		Optional<ApiUser> optionalUser = userRepository.findById(id);
 		if (optionalUser.isEmpty()) {
 			return false;
@@ -77,13 +75,13 @@ public class UserService {
 		ApiUser user = optionalUser.get();
 		
 		// if the user is trying to delete a user that is not himself, make sure it's an administrator.
-		if (id != user.getId()) {
-			Optional<ApiUser> optionalAdminUser = userRepository.findById(id);
+		if (! email.equals(user.getEmail())) {
+			Optional<ApiUser> optionalAdminUser = userRepository.findByEmail(email);
 			if (optionalAdminUser.isEmpty()) {
-				return false;
+	            throw new IllegalArgumentException("Forbidden");
 			}
 			if (optionalAdminUser.get().getRole() != Role.ADMINISTRATOR) {
-				return false;
+	            throw new IllegalArgumentException("Forbidden");
 			}
 		}
 		userRepository.delete(user);

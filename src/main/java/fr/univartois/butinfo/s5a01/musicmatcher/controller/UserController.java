@@ -65,8 +65,6 @@ public class UserController {
 	@PutMapping("/{id}")
 	@ResponseBody
 	public ResponseEntity<ApiUserDto> updateUser(Authentication authentication, @PathVariable int id, @RequestBody UpdateUserRequest request) {
-		System.out.println(request);
-		System.out.println(id);
 		ApiUserDto user = userService.updateUser(id, request, authentication.getName());
 		if (user!=null) {
 			return ResponseEntity.ok(user);
@@ -81,8 +79,8 @@ public class UserController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@DeleteMapping("/{id}")
 	@ResponseBody
-	public ResponseEntity<String> deleteUser(@PathVariable int id) {
-		boolean wasDeleted = userService.deleteUser(id);
+	public ResponseEntity<String> deleteUser(Authentication authentication, @PathVariable int id) {
+		boolean wasDeleted = userService.deleteUser(id, authentication.getName());
 		if (wasDeleted) {
 			return ResponseEntity.ok("User was deleted successfully");
 		}
