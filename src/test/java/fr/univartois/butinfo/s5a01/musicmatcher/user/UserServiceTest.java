@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ApiUserDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.UpdateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
@@ -54,6 +52,27 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	void banUserTest() {
+		ApiUser user = new ApiUser();
+		user.setId(1);
+		user.setLocked(false);
+		when(userRepository.findById(1)).thenReturn(Optional.of(user));
+		assertThat(userService.banUser(1)).isTrue();
+		assertThat(userService.banUser(1)).isTrue();
+		assertThat(userService.banUser(0)).isFalse();
+	}
+	
+	@Test
+	void unbanUserTest() {
+		ApiUser user = new ApiUser();
+		user.setId(1);
+		user.setLocked(true);
+		when(userRepository.findById(1)).thenReturn(Optional.of(user));
+		assertThat(userService.unbanUser(1)).isTrue();
+		assertThat(userService.unbanUser(1)).isTrue();
+		assertThat(userService.unbanUser(0)).isFalse();
+	}
+	
 	public void TestUpdateUser() {
 		String email = "toto@example.com";
 		
