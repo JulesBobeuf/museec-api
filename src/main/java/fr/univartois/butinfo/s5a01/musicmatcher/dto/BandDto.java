@@ -9,7 +9,7 @@ public class BandDto {
 	private String description;
 	private int owner;
 	private String profilePicture;
-	private int videoLink;
+	private String videoLink;
 	private LocalDateTime dateCreation;
 	private LocalDateTime dateUpdate;
 	
@@ -47,10 +47,10 @@ public class BandDto {
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
 	}
-	public int getVideoLink() {
+	public String getVideoLink() {
 		return videoLink;
 	}
-	public void setVideoLink(int videoLink) {
+	public void setVideoLink(String videoLink) {
 		this.videoLink = videoLink;
 	}
 	public LocalDateTime getDateCreation() {

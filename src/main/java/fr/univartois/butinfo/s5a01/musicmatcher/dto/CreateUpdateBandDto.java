@@ -6,7 +6,7 @@ public class CreateUpdateBandDto {
 	private String description;
 	private int owner;
 	private String profilePicture;
-	private int videoLink;
+	private String videoLink;
 	
 	public CreateUpdateBandDto() {
 		
@@ -36,10 +36,10 @@ public class CreateUpdateBandDto {
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
 	}
-	public int getVideoLink() {
+	public String getVideoLink() {
 		return videoLink;
 	}
-	public void setVideoLink(int videoLink) {
+	public void setVideoLink(String videoLink) {
 		this.videoLink = videoLink;
 	}
 }

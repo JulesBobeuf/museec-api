@@ -26,7 +26,7 @@ public class Band {
 	@NotNull
 	private String profilePicture;
 	@NotNull
-	private int videoLink;
+	private String videoLink;
 	@NotNull
 	private LocalDateTime dateCreation;
 	@NotNull
@@ -66,10 +66,10 @@ public class Band {
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
 	}
-	public int getVideoLink() {
+	public String getVideoLink() {
 		return videoLink;
 	}
-	public void setVideoLink(int videoLink) {
+	public void setVideoLink(String videoLink) {
 		this.videoLink = videoLink;
 	}
 	public LocalDateTime getDateCreation() {
