@@ -64,12 +64,12 @@ public class UserController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PutMapping("/{id}")
 	@ResponseBody
-	public ResponseEntity<ApiUserDto> updateUser(Authentication authentication, @PathVariable int id, @RequestBody UpdateUserRequest request) {
-		ApiUserDto user = userService.updateUser(id, request, authentication.getName());
-		if (user!=null) {
-			return ResponseEntity.ok(user);
+	public ResponseEntity<String> updateUser(Authentication authentication, @PathVariable int id, @RequestBody UpdateUserRequest request) {
+		boolean wasUpdated = userService.updateUser(id, request, authentication.getName());
+		if (wasUpdated) {
+			return ResponseEntity.ok("User was updated Successfully");
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found");
 	}
 	
 	

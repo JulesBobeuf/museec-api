@@ -33,10 +33,10 @@ public class UserService {
 		return null;
 	}
 	
-	public ApiUserDto updateUser(int id, UpdateUserRequest request, String email) {
+	public boolean updateUser(int id, UpdateUserRequest request, String email) {
 		Optional<ApiUser> optionalUser = userRepository.findById(id);
 		if (optionalUser.isEmpty()) {
-			return null;
+			return false;
 		}
 		ApiUser user = optionalUser.get();
 		
@@ -64,7 +64,7 @@ public class UserService {
 		user.setProfilePicture(request.getProfilePicture());
 		
 		user = userRepository.save(user);
-		return ApiUserToApiUserDtoMapper.INSTANCE.apiUserToApiUserDto(user);
+		return true;
 	}
 	
 	/**
