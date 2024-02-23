@@ -127,6 +127,7 @@ public class AuthService implements UserDetailsService {
     	LocalDateTime now = LocalDateTime.now();
 		user.setDateCreation(now);
     	user.setDateUpdate(now);
+    	user.setIdBand(-1);
     	user.setLocked(false);
     	user.setHistory(new ArrayList<>());
     	return user;

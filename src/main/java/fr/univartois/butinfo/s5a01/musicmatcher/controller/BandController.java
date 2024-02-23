@@ -2,6 +2,7 @@ package fr.univartois.butinfo.s5a01.musicmatcher.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +30,8 @@ public class BandController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PostMapping("/")
 	@ResponseBody
-	public ResponseEntity<String> register(@RequestBody CreateUpdateBandDto request) {
-		boolean isCreated = bandService.createBand(request);
+	public ResponseEntity<String> register(Authentication authentication, @RequestBody CreateUpdateBandDto request) {
+		boolean isCreated = bandService.createBand(request, authentication.getName());
 		if (isCreated) {
 			return ResponseEntity.ok("The band was created successfully");
 
