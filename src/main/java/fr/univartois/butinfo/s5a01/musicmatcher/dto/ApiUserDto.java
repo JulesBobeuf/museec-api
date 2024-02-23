@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
-import fr.univartois.butinfo.s5a01.musicmatcher.document.History;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.History;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
