@@ -73,7 +73,7 @@ public class UserController {
 	}
 	
 	
-	@Operation(summary = "getUser", description = "Get a user", tags = { "User" })
+	@Operation(summary = "deleteUser", description = "Delete a user", tags = { "User" })
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
