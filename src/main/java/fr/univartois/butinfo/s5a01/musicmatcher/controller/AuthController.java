@@ -43,7 +43,11 @@ public class AuthController {
 	@PostMapping("/createuser")
 	@ResponseBody
 	public ResponseEntity<String> register(@RequestBody CreateUserRequest request) {
-		return ResponseEntity.ok(authService.createUser(request));
+		boolean wasCreated = authService.createUser(request);
+		if (wasCreated) {
+			return ResponseEntity.ok("User registered successfully");
+		}
+		return ResponseEntity.badRequest().body("User could not be created. Bad request");
 	}
 
 	@Operation(summary = "login", description = "Log in!", tags = { "Auth" })
