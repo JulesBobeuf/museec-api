@@ -59,10 +59,13 @@ public class BandService {
 	 */
 	public boolean createBand(CreateUpdateBandDto request, String email) {
 		Band band = CreateUpdateBandDtoToBandMapper.INSTANCE.createUpdateBandDtoToBand(request);
+		System.out.println(request.getOwner() + " " + band.getOwner()+ " " + email);
 		Optional<ApiUser> optionalOwner = userRepository.findById(band.getOwner());
 		if (optionalOwner.isPresent()) {
+			System.out.println("owner present");
 			ApiUser owner = optionalOwner.get();
-			if (owner.getIdBand()<=-1 && owner.getEmail().equals(email)) {
+			if (owner.getIdBand()<=-1 && (owner.getEmail().equals(email) || owner.getRole() == Role.ADMINISTRATOR)) {
+				System.out.println("in if");
 				band.setId(sequenceService.generateSequence(Band.SEQUENCE_NAME));
 				LocalDateTime now = LocalDateTime.now();
 				band.setDateCreation(now);
@@ -75,6 +78,44 @@ public class BandService {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Update a band
+	 * @param id
+	 * @param request
+	 * @param email
+	 * @return wasCreated
+	 */
+	public boolean updateBand(int id, CreateUpdateBandDto request, String email) {
+		Optional<Band> optionalBand = bandRepository.findById(id);
+		Optional<ApiUser> optionalUser = userRepository.findByEmail(email);
+		if (optionalBand.isEmpty() || optionalUser.isEmpty()) {
+			return false;
+		}
+		
+		Band band = optionalBand.get();
+		ApiUser user = optionalUser.get();
+		
+		if (band.getOwner() != user.getId()) {
+			if (user.getRole() != Role.ADMINISTRATOR) {
+	            throw new IllegalArgumentException("Forbidden");
+			}
+		}
+		
+		// make sure the new owner exists
+		if (userRepository.findById(request.getOwner()).isEmpty()) {
+			return false;
+		}
+		
+		band.setName(request.getName());
+		band.setDescription(request.getDescription());
+		band.setOwner(request.getOwner());
+		band.setProfilePicture(request.getProfilePicture());
+		band.setVideoLink(request.getVideoLink());
+		band.setDateUpdate(LocalDateTime.now());
+		bandRepository.save(band);
+		return true;
 	}
 	
 	/**

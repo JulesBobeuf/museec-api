@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,8 +39,8 @@ public class BandController {
 	@PostMapping("/")
 	@ResponseBody
 	public ResponseEntity<String> createBand(Authentication authentication, @RequestBody CreateUpdateBandDto request) {
-		boolean isCreated = bandService.createBand(request, authentication.getName());
-		if (isCreated) {
+		boolean wasCreated = bandService.createBand(request, authentication.getName());
+		if (wasCreated) {
 			return ResponseEntity.ok("The band was created successfully");
 
 		}
@@ -67,6 +68,20 @@ public class BandController {
 	@ResponseBody
 	public ResponseEntity<List<BandDto>> getAllBands() {
 		return ResponseEntity.ok(bandService.getAllBands());
+	}
+	
+	@Operation(summary = "updateBand", description = "Update a band", tags = { "Band" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PutMapping("/{id}")
+	@ResponseBody
+	public ResponseEntity<String> updateBand(Authentication authentication, @PathVariable int id, @RequestBody CreateUpdateBandDto request) {
+		boolean wasUpdated = bandService.updateBand(id, request, authentication.getName());
+		if (wasUpdated) {
+			return ResponseEntity.ok("The band was updated successfully");
+
+		}
+		return ResponseEntity.badRequest().body("The band could not be updated. Bad request");
 	}
 	
 	@Operation(summary = "deleteBand", description = "Delete a band", tags = { "Band" })
