@@ -43,7 +43,7 @@ public class BandServiceTest {
 		CreateUpdateBandDto bandDto = new CreateUpdateBandDto();
 		bandDto.setName("hey");
 		bandDto.setDescription("hey");
-		bandDto.setOwner(0); // change the owner, so executing the request twice won't work
+		bandDto.setOwner(0); //change the owner, so executing the request twice won't work
 		bandDto.setProfilePicture("./img.png");
 		bandDto.setVideoLink("https://youtube.com");
 		
