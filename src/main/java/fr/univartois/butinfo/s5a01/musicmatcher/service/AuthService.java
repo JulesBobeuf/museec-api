@@ -84,19 +84,19 @@ public class AuthService implements UserDetailsService {
 		return "Password changed sucessfully";
     }
     
-    public String createUser(CreateUserRequest request) {
+    public boolean createUser(CreateUserRequest request) {
     	if (! request.getPassword().equals(request.getConfirmPassword())) {
-        	return "Failed to create User : Passwords don't match";
+        	return false;
     	}
     	if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-        	return "Failed to create User : email already exists";
+        	return false;
     	}
     	ApiUser user = CreateUserRequestToApiUserMapper.INSTANCE.createUserRequestToApiUser(request);
         user = initUser(user);
     	user.setPassword(passwordEncoder.encode(request.getPassword()));
     	
     	userRepository.save(user);
-    	return "User created successfully";
+    	return true;
     }
 
     public String login(AuthenticationRequest request) {
@@ -127,6 +127,7 @@ public class AuthService implements UserDetailsService {
     	LocalDateTime now = LocalDateTime.now();
 		user.setDateCreation(now);
     	user.setDateUpdate(now);
+    	user.setIdBand(-1);
     	user.setLocked(false);
     	user.setHistory(new ArrayList<>());
     	return user;

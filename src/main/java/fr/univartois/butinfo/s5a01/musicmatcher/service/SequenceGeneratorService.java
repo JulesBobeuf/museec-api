@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import fr.univartois.butinfo.s5a01.musicmatcher.sequence.DatabaseSequence;
+import fr.univartois.butinfo.s5a01.musicmatcher.document.DatabaseSequence;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 import static org.springframework.data.mongodb.core.query.Criteria.where;

@@ -1,4 +1,4 @@
-package fr.univartois.butinfo.s5a01.musicmatcher.document;
+package fr.univartois.butinfo.s5a01.musicmatcher.utils;
 
 import java.time.LocalDate;
 

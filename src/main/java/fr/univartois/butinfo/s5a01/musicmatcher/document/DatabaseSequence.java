@@ -1,4 +1,4 @@
-package fr.univartois.butinfo.s5a01.musicmatcher.sequence;
+package fr.univartois.butinfo.s5a01.musicmatcher.document;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
