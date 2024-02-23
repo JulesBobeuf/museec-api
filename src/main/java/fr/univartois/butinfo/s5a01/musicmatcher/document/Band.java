@@ -10,6 +10,11 @@ import jakarta.validation.constraints.NotNull;
 @Document
 public class Band {
 	
+	/**
+	 * Name of the sequence in the database.
+	 */
+	public static final String SEQUENCE_NAME = "bandsequence";
+	
 	@Id
 	private int id;
 	@NotNull
