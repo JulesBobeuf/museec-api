@@ -1,11 +1,14 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.offer;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
@@ -13,13 +16,10 @@ import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.OfferRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.OfferService;
-import fr.univartois.butinfo.s5a01.musicmatcher.service.UserService;
 
+@SpringBootTest
 class OfferServiceTest {
-	
-	@Autowired
-	private UserService userService;
-	
+
 	@MockBean
 	private UserRepository userRepository;
 	
@@ -31,20 +31,41 @@ class OfferServiceTest {
 
 	@Test
 	void accepteOfferTest() {
-		ApiUser user = new ApiUser();
-		user.setEmail("toto@example.com");
-		user.setId(1);
+		ApiUser user1 = new ApiUser();
+		user1.setId(1);
+		user1.setIdBand(-1);
+		when(userRepository.findById(1)).thenReturn(Optional.of(user1));
 		
-		when(userRepository.findById(1)).thenReturn(Optional.of(user));
+		ApiUser user2 = new ApiUser();
+		user2.setId(2);
+		user2.setIdBand(2);
+		when(userRepository.findById(2)).thenReturn(Optional.of(user2));
 		
 		Offer offer = new Offer();
 		offer.setId(1);
+		offer.setAwaitingMembers(new HashSet<>());
 		when(offerRepository.findById(1)).thenReturn(Optional.of(offer));
+		
+		assertThat(offerService.accepteOffer(1,1)).isTrue();
+		assertThat(offerService.accepteOffer(0,1)).isFalse();
+		assertThat(offerService.accepteOffer(1,0)).isFalse();
+		assertThat(offerService.accepteOffer(2,1)).isFalse();
 	}
 
 	@Test
 	void rejectOfferTest() {
+		ApiUser user1 = new ApiUser();
+		user1.setId(1);
+		when(userRepository.findById(1)).thenReturn(Optional.of(user1));
 		
+		Offer offer = new Offer();
+		offer.setId(1);
+		offer.setUsersThatRejected(new HashSet<>());
+		when(offerRepository.findById(1)).thenReturn(Optional.of(offer));
+		
+		assertThat(offerService.rejectOffer(1,1)).isTrue();
+		assertThat(offerService.rejectOffer(0,1)).isFalse();
+		assertThat(offerService.rejectOffer(1,0)).isFalse();
 	}
 	
 }
