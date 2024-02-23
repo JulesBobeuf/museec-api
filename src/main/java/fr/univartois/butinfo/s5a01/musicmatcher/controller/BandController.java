@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,6 +67,19 @@ public class BandController {
 	@ResponseBody
 	public ResponseEntity<List<BandDto>> getAllBands() {
 		return ResponseEntity.ok(bandService.getAllBands());
+	}
+	
+	@Operation(summary = "deleteBand", description = "Delete a band", tags = { "Band" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@DeleteMapping("/{id}")
+	@ResponseBody
+	public ResponseEntity<String> deleteBand(Authentication authentication, @PathVariable int id) {
+		boolean wasDeleted = bandService.deleteBand(id, authentication.getName());
+		if (wasDeleted) {
+			return ResponseEntity.ok("The band was deleted successfully");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The band was not found");
 	}
 	
 }
