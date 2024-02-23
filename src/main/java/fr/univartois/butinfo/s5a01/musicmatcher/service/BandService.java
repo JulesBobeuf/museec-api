@@ -1,6 +1,7 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.BandDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateBandDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.mapper.BandToBandDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateBandDtoToBandMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
@@ -25,6 +28,34 @@ public class BandService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	/**
+	 * Get all bands
+	 * @return bands
+	 */
+	public List<BandDto> getAllBands() {
+		List<Band> allBands = bandRepository.findAll();
+		return BandToBandDtoMapper.INSTANCE.listBandToListBandDto(allBands);
+	}
+	
+	/**
+	 * Get a single band
+	 * @param id
+	 * @return The band. Result can be null if the band does not exist.
+	 */
+	public BandDto getBand(int id) {
+		Optional<Band> optionalBand = bandRepository.findById(id);
+		if (optionalBand.isPresent()) {
+			return BandToBandDtoMapper.INSTANCE.bandToBandDto(optionalBand.get());
+		}
+		return null;
+	}
+	
+	/**
+	 * Create a band
+	 * @param request
+	 * @param email
+	 * @return wasCreated
+	 */
 	public boolean createBand(CreateUpdateBandDto request, String email) {
 		Band band = CreateUpdateBandDtoToBandMapper.INSTANCE.createUpdateBandDtoToBand(request);
 		Optional<ApiUser> optionalOwner = userRepository.findById(band.getOwner());
