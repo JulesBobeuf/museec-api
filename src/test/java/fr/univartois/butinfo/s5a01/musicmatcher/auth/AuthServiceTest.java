@@ -2,6 +2,7 @@ package fr.univartois.butinfo.s5a01.musicmatcher.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.AuthenticationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ChangePasswordDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.AuthService;
@@ -104,4 +106,25 @@ public class AuthServiceTest {
         	}
         });
     }
+	
+	@Test
+	public void loginTest() {
+		String email = "toto@example.com";
+		String password = "string";
+		AuthenticationRequest request = new AuthenticationRequest();
+		request.setEmail(email);
+		request.setPassword(password);
+		
+		ApiUser apiUser = new ApiUser();
+		apiUser.setId(0);
+		apiUser.setEmail("toto@example.com");
+		apiUser.setPassword(passwordEncoder.encode(password));
+		
+		when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(apiUser));
+		assertThat(authService.login(request)).isInstanceOf(String.class);
+		
+		apiUser.setPassword("sdcnsdkcsn");
+		assertThat(authService.login(request)).isEqualTo("Can't login : wrong credentials");
+		
+	}
 }
