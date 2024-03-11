@@ -166,17 +166,17 @@ class OfferServiceTest {
 		offer3.setIdBand(1);
 		when(bandRepository.findById(1)).thenReturn(Optional.of(band1));
 		
-		assertThat(offerService.acceptMusician("un",0,0)).isFalse();
-		assertThat(offerService.acceptMusician(email1,0,0)).isFalse();
-		assertThat(offerService.acceptMusician("deux",1,0)).isFalse();
-		assertThat(offerService.acceptMusician("trois",0,1)).isFalse();
-		assertThat(offerService.acceptMusician(email1,1,0)).isFalse();
-		assertThat(offerService.acceptMusician("soleil",1,1)).isFalse();
-		assertThat(offerService.acceptMusician(email1,0,1)).isFalse();
-		assertThat(offerService.acceptMusician(email1,1,1)).isFalse();
-		assertThat(offerService.acceptMusician("Thomas@gmail.com",3,1)).isFalse();
-		assertThat(offerService.acceptMusician("Thomas@gmail.com",3,4)).isFalse();
-		assertThat(offerService.acceptMusician(email1,3,4)).isFalse();
+		assertThat(offerService.rejectMusician("un",0,0)).isFalse();
+		assertThat(offerService.rejectMusician(email1,0,0)).isFalse();
+		assertThat(offerService.rejectMusician("deux",1,0)).isFalse();
+		assertThat(offerService.rejectMusician("trois",0,1)).isFalse();
+		assertThat(offerService.rejectMusician(email1,1,0)).isFalse();
+		assertThat(offerService.rejectMusician("soleil",1,1)).isFalse();
+		assertThat(offerService.rejectMusician(email1,0,1)).isFalse();
+		assertThat(offerService.rejectMusician(email1,1,1)).isFalse();
+		assertThat(offerService.rejectMusician("Thomas@gmail.com",3,1)).isFalse();
+		assertThat(offerService.rejectMusician("Thomas@gmail.com",3,4)).isFalse();
+		assertThat(offerService.rejectMusician(email1,3,4)).isFalse();
 	}
 	
 }
