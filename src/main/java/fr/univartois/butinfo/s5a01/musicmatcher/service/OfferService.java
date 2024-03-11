@@ -74,7 +74,12 @@ public class OfferService {
     	ApiUser realMusician = musician.get();
     	ApiUser realOwner = owner.get();
     	Offer realOffer = offer.get();
-    	Optional<Band> band = bandRepository.findById(realOwner.getIdBand());
+    	Optional<Band> band = bandRepository.findById(realOffer.getIdBand());
+    	
+    	if (band.isEmpty()) {
+    		return false;
+    	}
+    	
     	Band realBand = band.get();
     	
     	if (realBand.getOwner() != realOwner.getId()) {
@@ -109,7 +114,12 @@ public class OfferService {
     	ApiUser realMusician = musician.get();
     	ApiUser realOwner = owner.get();
     	Offer realOffer = offer.get();
-    	Optional<Band> band = bandRepository.findById(realOwner.getIdBand());
+    	Optional<Band> band = bandRepository.findById(realOffer.getIdBand());
+    	
+    	if (band.isEmpty()) {
+    		return false;
+    	}
+    	
     	Band realBand = band.get();
     	
     	if (realBand.getOwner() != realOwner.getId()) {

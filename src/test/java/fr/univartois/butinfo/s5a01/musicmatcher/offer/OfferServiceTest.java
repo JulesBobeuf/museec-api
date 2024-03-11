@@ -113,6 +113,7 @@ class OfferServiceTest {
 		offer3.setId(3);
 		offer3.setAwaitingMembers(Set.of(4));
 		offer3.setActive(true);
+		offer3.setIdBand(1);
 		when(offerRepository.findById(3)).thenReturn(Optional.of(offer3));
 		
 		Band band1 = new Band();
@@ -162,6 +163,7 @@ class OfferServiceTest {
 		Band band1 = new Band();
 		band1.setId(1);
 		band1.setOwner(1);
+		offer3.setIdBand(1);
 		when(bandRepository.findById(1)).thenReturn(Optional.of(band1));
 		
 		assertThat(offerService.acceptMusician("un",0,0)).isFalse();
