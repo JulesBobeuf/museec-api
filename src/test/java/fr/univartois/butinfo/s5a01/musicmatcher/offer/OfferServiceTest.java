@@ -119,6 +119,8 @@ class OfferServiceTest {
 		Band band1 = new Band();
 		band1.setId(1);
 		band1.setOwner(1);
+
+		when(bandRepository.findById(0)).thenReturn(Optional.empty());
 		when(bandRepository.findById(1)).thenReturn(Optional.of(band1));
 		
 		assertThat(offerService.acceptMusician("un",0,0)).isFalse();
@@ -164,6 +166,8 @@ class OfferServiceTest {
 		band1.setId(1);
 		band1.setOwner(1);
 		offer3.setIdBand(1);
+		
+		when(bandRepository.findById(0)).thenReturn(Optional.empty());
 		when(bandRepository.findById(1)).thenReturn(Optional.of(band1));
 		
 		assertThat(offerService.rejectMusician("un",0,0)).isFalse();

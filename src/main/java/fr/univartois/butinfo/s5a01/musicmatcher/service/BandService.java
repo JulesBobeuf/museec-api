@@ -60,9 +60,10 @@ public class BandService {
 	public boolean createBand(CreateUpdateBandDto request, String email) {
 		Band band = CreateUpdateBandDtoToBandMapper.INSTANCE.createUpdateBandDtoToBand(request);
 		Optional<ApiUser> optionalOwner = userRepository.findById(band.getOwner());
-		if (optionalOwner.isPresent()) {
+		Optional<ApiUser> optionalUser = userRepository.findByEmail(email);
+		if (optionalOwner.isPresent() && optionalUser.isPresent()) {
 			ApiUser owner = optionalOwner.get();
-			if (owner.getIdBand()<=-1 && (owner.getEmail().equals(email) || owner.getRole() == Role.ADMINISTRATOR)) {
+			if ((owner.getIdBand()==-1 && owner.getEmail().equals(email)) || optionalUser.get().getRole() == Role.ADMINISTRATOR) {
 				band.setId(sequenceService.generateSequence(Band.SEQUENCE_NAME));
 				LocalDateTime now = LocalDateTime.now();
 				band.setDateCreation(now);
