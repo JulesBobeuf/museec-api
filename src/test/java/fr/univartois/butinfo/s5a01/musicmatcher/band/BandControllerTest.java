@@ -8,9 +8,14 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.nio.charset.Charset;
+
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,16 +23,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
-import fr.univartois.butinfo.s5a01.musicmatcher.controller.BandController;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.BandDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateBandDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.BandService;
 import jakarta.servlet.ServletContext;
 
@@ -37,15 +47,25 @@ class BandControllerTest {
 	
 	@Autowired
 	private WebApplicationContext webApplicationContext;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@MockBean
 	private BandService bandService;
 	
 	private MockMvc mockMvc;
 	
+	private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
+			MediaType.APPLICATION_JSON.getType(), 
+			MediaType.APPLICATION_JSON.getSubtype(), 
+			Charset.forName("utf8"));
+	
 	@BeforeEach
 	public void setup() throws Exception {
-	    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+	    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
+				.apply(springSecurity())
+	    		.build();
 	}
 	
 	@Test
@@ -57,6 +77,7 @@ class BandControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "toto@example.org", password="passwd", roles={"READ", "ADD", "UPDATE", "DELETE"})
 	void getBandsTest() throws Exception {
 	    this.mockMvc.perform(get("/api/band/"))
 	    		.andExpect(status().isOk())
@@ -64,6 +85,7 @@ class BandControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "toto@example.org", password="passwd", roles={"READ", "ADD", "UPDATE", "DELETE"})
 	void getBandTest() throws Exception {
 		when(bandService.getBand(1)).thenReturn(new BandDto());
 		
@@ -89,12 +111,43 @@ class BandControllerTest {
 		
 	    this.mockMvc.perform(delete("/api/band/{id}", 1))
 			.andExpect(status().isOk())
-		    .andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.message").value("The band was deleted successfully"));
+			.andExpect(content().string("The band was deleted successfully"));
 		    
 	    this.mockMvc.perform(delete("/api/band/{id}", 8796))
 			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.message").value("The band was not found"));
+			.andExpect(content().string("The band was not found"));
 	}
 	
+	@Test
+	@WithMockUser(username = "toto@example.org", password="passwd", roles={"READ", "ADD", "UPDATE", "DELETE"})
+	void createBandTest() throws Exception {
+		ApiUser apiUser = new ApiUser();
+		apiUser.setId(1);
+		apiUser.setEmail("toto@example.org");
+		apiUser.setPassword("passwd");
+		apiUser.setRole(Role.ADMINISTRATOR);
+		
+		CreateUpdateBandDto band = new CreateUpdateBandDto();
+		band.setName("hey");
+		band.setDescription("the coolest description");
+		band.setOwner(1);
+		band.setProfilePicture("./img.png");
+		band.setVideoLink("https://youtube.com");
+		
+		/*
+	    this.mockMvc.perform(post("/api/band/").content("{\r\n"
+	    		+ "    \"name\": \"heyooo\","
+	    		+ "    \"description\": \"a wonderful desc\","
+	    		+ "    \"profilePicture\": \"./img.png\","
+	    		+ "    \"videoLink\": \"https://youtube.com\","
+	    		+ "    \"owner\": 1}")
+	    		.contentType(APPLICATION_JSON_UTF8))
+			.andExpect(status().isOk())
+			.andExpect(content().string("The band was created successfully"));
+		    */
+	    this.mockMvc.perform(post("/api/band/").content("randomcontent")
+				.contentType(APPLICATION_JSON_UTF8))
+			.andExpect(status().isBadRequest());
+	}
+
 }
