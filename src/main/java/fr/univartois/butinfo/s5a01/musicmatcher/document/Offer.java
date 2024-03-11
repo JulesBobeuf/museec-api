@@ -42,6 +42,8 @@ public class Offer {
 	private Date dateCreation;
 	@NotNull
 	private Date dateUpdate;
+	@NotNull
+	private boolean isActive;
 	
 	public Offer() {
 		
@@ -148,5 +150,11 @@ public class Offer {
 		this.usersThatRejected.add(idUsersThatRejected);
 		return usersThatRejected;
 	}
-
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	
 }
