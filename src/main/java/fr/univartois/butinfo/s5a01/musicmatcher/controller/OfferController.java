@@ -27,7 +27,7 @@ public class OfferController {
 	@Operation(summary = "acceptOffer", description = "Accept an offer", tags = { "Offer" })
 	@ApiResponse(responseCode = "200", description = "Offer Accepted Successfully", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", description = "User/Offer was not found", content = { @Content(schema = @Schema()) })
-	@GetMapping("/acceptOffer")
+	@GetMapping("/accept")
 	@ResponseBody
 	public ResponseEntity<String> accepteOffer(@RequestParam int idUser, @RequestParam int idOffer) {
 		boolean result = offerService.accepteOffer(idUser,idOffer);
@@ -40,40 +40,14 @@ public class OfferController {
 	@Operation(summary = "rejectOffer", description = "Reject an offer", tags = { "Offer" })
 	@ApiResponse(responseCode = "200", description = "Offer rejected Successfully", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", description = "User/Offer was not found", content = { @Content(schema = @Schema()) })
-	@GetMapping("/rejectOffer")
+	@GetMapping("/reject")
 	@ResponseBody
 	public ResponseEntity<String> rejectOffer(@RequestParam int idUser, @RequestParam int idOffer) {
 		boolean result = offerService.rejectOffer(idUser,idOffer);
 		if (result) {
-			return ResponseEntity.ok("Offer rejected succefully");
+			return ResponseEntity.ok("User was unbanned");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or offer was not found");
-	}
-	
-	@Operation(summary = "acceptMusician", description = "Accept a Musician in a band", tags = { "Offer" })
-	@ApiResponse(responseCode = "200", description = "Musician accepted Successfully", content = { @Content(schema = @Schema()) })
-	@ApiResponse(responseCode = "404", description = "Owner/Offer/Musician was not found", content = { @Content(schema = @Schema()) })
-	@GetMapping("/acceptMusician")
-	@ResponseBody
-	public ResponseEntity<String> acceptMusician(@RequestParam int idUser, @RequestParam int idOffer) {
-		boolean result = offerService.rejectOffer(idUser,idOffer);
-		if (result) {
-			return ResponseEntity.ok("Musician accepted in the band");
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Musician, owner or offer was not found");
-	}
-	
-	@Operation(summary = "rejectMusician", description = "Reject a Musician in a band", tags = { "Offer" })
-	@ApiResponse(responseCode = "200", description = "Musician rejected Successfully", content = { @Content(schema = @Schema()) })
-	@ApiResponse(responseCode = "404", description = "Owner/Offer/Musician was not found", content = { @Content(schema = @Schema()) })
-	@GetMapping("/rejectMusician")
-	@ResponseBody
-	public ResponseEntity<String> rejectMusician(@RequestParam int idUser, @RequestParam int idOffer) {
-		boolean result = offerService.rejectOffer(idUser,idOffer);
-		if (result) {
-			return ResponseEntity.ok("Musician rejectef of the band");
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Musician, owner or offer was not found");
 	}
 
 }
