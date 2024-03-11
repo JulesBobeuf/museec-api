@@ -2,10 +2,13 @@ package fr.univartois.butinfo.s5a01.musicmatcher.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,8 +39,7 @@ public class UserServiceTest {
 	@MockBean
 	private UserRepository userRepository;
 	
-	//@Test
-	//Mapstruct does not work for tests...
+	@Test
 	public void getUserTest() {
 		ApiUser user = new ApiUser();
 		user.setEmail("toto@example.com");
@@ -48,7 +50,70 @@ public class UserServiceTest {
 		ApiUserDto user2 = userService.getUser(1);
 		assertThat(user2.getId()).isEqualTo(user.getId());
 		assertThat(user2.getEmail()).isEqualTo(user.getEmail());
+	}
+	
+	@Test
+	public void getAllUsersTest() {
+		LocalDateTime now = LocalDateTime.now();
+		
+		ApiUser user0 = new ApiUser();
+		user0.setEmail("toto0@example.com");
+		user0.setId(2);
 
+		ApiUser user1 = new ApiUser();
+		user1.setEmail("toto@example.com");
+		user1.setId(1);
+		user1.setAge(20);
+		user1.setCountry(Country.FRANCE);
+		user1.setFirstName("Jules");
+		user1.setLastName("Bobeuf");
+		user1.setDateCreation(now);
+		user1.setDateUpdate(now);
+		user1.setGender(Gender.MALE);
+		user1.setIdBand(4);
+		user1.setInstruments(Set.of(Instrument.GUITAR, Instrument.PIANO));
+		user1.setMusicStyles(Set.of(MusicStyle.ACOUSTIC, MusicStyle.FOLK));
+		user1.setDescription("this is my wonderful description.");
+		user1.setLookingForAGroup(false);
+		user1.setSkills(Set.of(Skill.MUSIC_THEORY));
+		
+		ApiUser user2 = new ApiUser();
+		user1.setEmail("toto2@example.com");
+		user1.setId(2);
+		
+		ApiUser user3 = new ApiUser();
+		user1.setEmail("toto3@example.com");
+		user1.setId(3);
+		
+		when(userRepository.findAll()).thenReturn(List.of(user0, user1, user2, user3));
+		
+		List<ApiUserDto> users = userService.getUsers();
+		assertThat(user1.getId()).isEqualTo(users.get(1).getId());
+		assertThat(user1.getEmail()).isEqualTo(users.get(1).getEmail());
+		assertThat(user1.getAge()).isEqualTo(users.get(1).getAge());
+		
+		assertThat(user1.getCountry()).isEqualTo(users.get(1).getCountry());
+		assertThat(user1.getFirstName()).isEqualTo(users.get(1).getFirstName());
+		assertThat(user1.getLastName()).isEqualTo(users.get(1).getLastName());
+		
+		assertThat(user1.getDateCreation()).isEqualTo(users.get(1).getDateCreation());
+		assertThat(user1.getDateUpdate()).isEqualTo(users.get(1).getDateUpdate());
+		assertThat(user1.getGender()).isEqualTo(users.get(1).getGender());
+		
+		assertTrue(users.get(1).getInstruments().containsAll(Set.of(Instrument.GUITAR, Instrument.PIANO)));
+		assertTrue(users.get(1).getMusicStyles().containsAll(Set.of(MusicStyle.ACOUSTIC, MusicStyle.FOLK)));
+		assertTrue(users.get(1).getSkills().contains(Skill.MUSIC_THEORY));
+
+		assertThat(user1.getDescription()).isEqualTo(users.get(1).getDescription());
+		assertThat(user1.isLookingForAGroup()).isEqualTo(users.get(1).isLookingForAGroup());
+		assertThat(user1.getIdBand()).isEqualTo(users.get(1).getIdBand());
+
+		
+		assertThat(user2.getId()).isEqualTo(users.get(2).getId());
+		assertThat(user2.getEmail()).isEqualTo(users.get(2).getEmail());
+		
+		assertThat(user3.getId()).isEqualTo(users.get(3).getId());
+		assertThat(user3.getEmail()).isEqualTo(users.get(3).getEmail());
 	}
 	
 	@Test
