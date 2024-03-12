@@ -1,6 +1,6 @@
 server_build:
   stage: build
-  image: "cache-ili.univ-artois.fr/proxy_cache/library/gradle:8.6.0-jdk17"
+  image: "cache-ili.univ-artois.fr/proxy_cache/library/gradle:8.5.0-jdk17"
   script:
     - ./gradlew build
   rules:
