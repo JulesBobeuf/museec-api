@@ -2,6 +2,7 @@ stages:
     - build
     - test
     - javadoc
+    - deploy
 
 image: "cache-ili.univ-artois.fr/proxy_cache/library/maven:3.8.4-openjdk-11"
 
@@ -9,10 +10,10 @@ include:
   # build
     - '/templates-gitlab-ci/.gitlab-ci-build.yml'
   # test
-    - '/templates-gitlab-ci/.gitlab-ci-test.yml'
+    #- '/templates-gitlab-ci/.gitlab-ci-test.yml'
   # quality (if merge to develop)
-    - '/templates-gitlab-ci/.gitlab-ci-quality.yml'
+    #- '/templates-gitlab-ci/.gitlab-ci-quality.yml'
   # prod (if merge to main)
-    - '/templates-gitlab-ci/.gitlab-ci-prod.yml'
+    #- '/templates-gitlab-ci/.gitlab-ci-prod.yml'
 
 
