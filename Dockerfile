@@ -1,0 +1,7 @@
+FROM gradle:8.6.0-jdk17
+
+MAINTAINER "Jules BOBEUF"
+
+COPY . .
+
+EXPOSE 8080

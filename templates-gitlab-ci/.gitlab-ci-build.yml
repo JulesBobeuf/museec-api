@@ -1,0 +1,12 @@
+server_build:
+  stage: build
+  image: "cache-ili.univ-artois.fr/proxy_cache/library/gradle:8.6.0-jdk17"
+  script:
+    - ./gradlew build'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
+  tags:
+    - docker2
+  allow_failure: false
+  
