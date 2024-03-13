@@ -32,7 +32,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
 
 @SpringBootTest
-public class AuthServiceTest {
+class AuthServiceTest {
 
 	@Autowired
 	private AuthService authService;
@@ -66,7 +66,7 @@ public class AuthServiceTest {
             public void execute() throws Throwable {
         		String email = "toto@example.com";
 				when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
-        		assertThat(authService.loadUserByUsername(email)).isEqualTo(null);
+        		assertThat(authService.loadUserByUsername(email)).isNull();
         	}
         });
 	}

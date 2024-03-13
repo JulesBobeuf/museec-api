@@ -188,7 +188,7 @@ class BandServiceTest {
 		when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
 		when(bandRepository.findById(1)).thenReturn(Optional.of(band));
 		
-		assertThat(bandService.updateBand(1, bandDto, email)).isEqualTo(true);
+		assertThat(bandService.updateBand(1, bandDto, email)).isTrue();
 		
         assertThrows(IllegalArgumentException.class, new Executable() {
             
