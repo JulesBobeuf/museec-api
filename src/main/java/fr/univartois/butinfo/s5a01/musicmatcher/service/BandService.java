@@ -122,15 +122,12 @@ public class BandService {
 	 */
 	public boolean deleteBand(int id, String email) {
 		Optional<Band> optionalBand = bandRepository.findById(id);
-		if (optionalBand.isEmpty()) {
+		Optional<ApiUser> optionalUser = userRepository.findByEmail(email);
+		
+		if (optionalBand.isEmpty() || optionalUser.isEmpty()) {
 			return false;
 		}
 		Band band = optionalBand.get();
-		
-		Optional<ApiUser> optionalUser = userRepository.findByEmail(email);
-		if (optionalUser.isEmpty()) {
-			return false;
-		}
 		ApiUser user = optionalUser.get();
 		
 		// if the user is trying to delete a band that is not his, make sure it's an administrator.

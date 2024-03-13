@@ -30,7 +30,7 @@ public class OfferController {
 	@GetMapping("/acceptOffer")
 	@ResponseBody
 	public ResponseEntity<String> accepteOffer(@RequestParam int idUser, @RequestParam int idOffer) {
-		boolean result = offerService.accepteOffer(idUser,idOffer);
+		boolean result = offerService.acceptOffer(idUser,idOffer);
 		if (result) {
 			return ResponseEntity.ok("User accept the offer succefully");
 		}

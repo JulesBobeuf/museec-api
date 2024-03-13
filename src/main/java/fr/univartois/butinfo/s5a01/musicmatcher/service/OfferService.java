@@ -16,6 +16,8 @@ import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 @Service
 public class OfferService {
 	
+	private static final String FORBIDDEN_MESSAGE = "Forbidden";
+
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -28,7 +30,7 @@ public class OfferService {
     /**
      * Method that allows a user to accept an offer
      */
-    public boolean accepteOffer(int idUser, int idOffer) {
+    public boolean acceptOffer(int idUser, int idOffer) {
     	Optional<ApiUser> user = userRepository.findById(idUser);
     	Optional<Offer> offer = offerRepository.findById(idOffer);
     	if (user.isEmpty() || offer.isEmpty()) {
@@ -83,7 +85,7 @@ public class OfferService {
     	Band realBand = band.get();
     	
     	if (realBand.getOwner() != realOwner.getId() &&  (realOwner.getRole() != Role.ADMINISTRATOR)) {
-	        throw new IllegalArgumentException("Forbidden");
+	        throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
 		}
     	
     	if (realMusician.isLookingForAGroup() && realMusician.getIdBand() == -1 && realOffer.getAwaitingMembers().contains(realMusician.getId())) {
@@ -120,9 +122,8 @@ public class OfferService {
     	
     	Band realBand = band.get();
     	
-    	if (realBand.getOwner() != realOwner.getId() &&  (realOwner.getRole() != Role.ADMINISTRATOR)) {
-	            throw new IllegalArgumentException("Forbidden");
-			
+    	if (realBand.getOwner() != realOwner.getId() && realOwner.getRole() != Role.ADMINISTRATOR) {
+	        throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
 		}
     	
     	if (realOffer.getAwaitingMembers().contains(realMusician.getId())) {
