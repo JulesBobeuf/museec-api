@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
@@ -11,27 +13,53 @@ import fr.univartois.butinfo.s5a01.musicmatcher.utils.History;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class ApiUserDto {
 
 	private int id;
+	@NotNull
+	@Size(min = 2,max = 30)
 	private String firstName;
+	@NotNull
+	@Size(min = 2,max = 30)
 	private String lastName;
+	@NotNull
+	@Min(18)
+	@Max(100)
 	private int age;
 	private Gender gender;
+	@NotNull
 	private String profilePicture;
 	private String description;
+	@NotNull
 	private boolean isLookingForAGroup;
+	@NotNull
 	private Set<Instrument> instruments;
+	@NotNull
 	private Set<Skill> skills;
+	@NotNull
 	private Set<MusicStyle> musicStyles;
+	@NotNull
 	private List<History> history;
-	private Country country;	
+	@NotNull
+	private Country country;
+	@NotNull
 	private int idBand;
+	@NotNull
 	private Role role;
+	@NotNull
 	private String email;
+	@NotNull
 	private boolean isLocked;
+	@NotNull
+	@DateTimeFormat
 	private LocalDateTime dateCreation;
+	@NotNull
+	@DateTimeFormat
 	private LocalDateTime dateUpdate;
 	
 	public List<History> getHistory() {

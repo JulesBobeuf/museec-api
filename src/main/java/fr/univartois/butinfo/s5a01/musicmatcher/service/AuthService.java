@@ -100,13 +100,14 @@ public class AuthService implements UserDetailsService {
     }
 
     public String login(AuthenticationRequest request) {
+    	String errorMsg = "Can't login : wrong credentials";
     	Optional<ApiUser> optionalUser = userRepository.findByEmail(request.getEmail());
     	if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User does not exist");
+        	return errorMsg;
     	}
     	ApiUser user = optionalUser.get();
     	if (user.isLocked()) {
-            throw new IllegalArgumentException("User is banned");
+        	return errorMsg;
     	}
     	if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
     	    Authentication authentication = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
@@ -114,7 +115,7 @@ public class AuthService implements UserDetailsService {
     	    String jwt = jwtService.generateToken(user);
             return jwt;
     	}
-    	return "Can't login : wrong credentials";
+    	return errorMsg;
     }
     
     /**
