@@ -10,7 +10,7 @@ include:
   # build
     - '/templates-gitlab-ci/.gitlab-ci-build.yml'
   # test
-    #- '/templates-gitlab-ci/.gitlab-ci-test.yml'
+    - '/templates-gitlab-ci/.gitlab-ci-test.yml'
   # quality (if merge to develop)
     #- '/templates-gitlab-ci/.gitlab-ci-quality.yml'
   # prod (if merge to main)
