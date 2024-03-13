@@ -2,10 +2,18 @@ package fr.univartois.butinfo.s5a01.musicmatcher.document;
 
 import java.util.Date;
 import java.util.Set;
+
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Document
@@ -15,8 +23,10 @@ public class Offer {
 	@Id
 	private int id;
 	@NotNull
+	@Size(min = 2,max = 30)
 	private String name;
 	@NotNull
+	@Size(min = 2,max = 1000)
 	private String description;
 	@NotNull
 	private Set<String> musicStyles;
@@ -25,13 +35,17 @@ public class Offer {
 	@NotNull
 	private Set<String> skills;
 	@NotNull
-	private String region;
+	private Country country;
 	@NotNull
+	@Max(100)
+	@Min(18)
 	private int ageMin;
 	@NotNull
+	@Min(18)
+	@Max(100)
 	private int ageMax;
 	@NotNull
-	private String gender;
+	private Gender gender;
 	@NotNull
 	private int idBand;
 	@NotNull
@@ -39,8 +53,10 @@ public class Offer {
 	@NotNull
 	private Set<Integer> awaitingMembers;
 	@NotNull
+	@DateTimeFormat
 	private Date dateCreation;
 	@NotNull
+	@DateTimeFormat
 	private Date dateUpdate;
 	@NotNull
 	private boolean isActive;
@@ -84,12 +100,6 @@ public class Offer {
 	public void setSkills(Set<String> skills) {
 		this.skills = skills;
 	}
-	public String getRegion() {
-		return region;
-	}
-	public void setRegion(String region) {
-		this.region = region;
-	}
 	public int getAgeMin() {
 		return ageMin;
 	}
@@ -102,10 +112,10 @@ public class Offer {
 	public void setAgeMax(int ageMax) {
 		this.ageMax = ageMax;
 	}
-	public String getGender() {
+	public Gender getGender() {
 		return gender;
 	}
-	public void setGender(String gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 	public int getIdBand() {
@@ -155,6 +165,12 @@ public class Offer {
 	}
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	public Country getCountry() {
+		return country;
+	}
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 	
 }

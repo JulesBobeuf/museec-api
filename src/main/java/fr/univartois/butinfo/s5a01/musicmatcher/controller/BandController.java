@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @Tag(name = "Band", description = "Band endpoint")
 @RestController
@@ -38,7 +39,7 @@ public class BandController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PostMapping("/")
 	@ResponseBody
-	public ResponseEntity<String> createBand(Authentication authentication, @RequestBody CreateUpdateBandDto request) {
+	public ResponseEntity<String> createBand(Authentication authentication, @Valid @RequestBody CreateUpdateBandDto request) {
 		boolean wasCreated = bandService.createBand(request, authentication.getName());
 		if (wasCreated) {
 			return ResponseEntity.ok("The band was created successfully");
@@ -75,7 +76,7 @@ public class BandController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PutMapping("/{id}")
 	@ResponseBody
-	public ResponseEntity<String> updateBand(Authentication authentication, @PathVariable int id, @RequestBody CreateUpdateBandDto request) {
+	public ResponseEntity<String> updateBand(Authentication authentication, @PathVariable int id, @Valid @RequestBody CreateUpdateBandDto request) {
 		boolean wasUpdated = bandService.updateBand(id, request, authentication.getName());
 		if (wasUpdated) {
 			return ResponseEntity.ok("The band was updated successfully");

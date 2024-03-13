@@ -1,9 +1,17 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class AuthenticationRequest {
 
+	@NotNull
+	@Size(min = 2,max = 100)
     private String email;
 
+	@NotNull
+	@Size(min = 8,max = 30)
     private String password;
 
     public AuthenticationRequest(String email, String password) {

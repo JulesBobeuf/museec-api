@@ -1,19 +1,25 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
+
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class ChangePasswordDto {
 
 	@NotNull
+	@Size(min = 2,max = 100)
 	private String email;
 	
 	@NotNull
+	@Size(min = 2,max = 30)
 	private String oldPassword;
 	
 	@NotNull
+	@Size(min = 2,max = 30)
 	private String newPassword;
 	
 	@NotNull
+	@Size(min = 2,max = 30)
 	private String confirmationPassword;
 
 	public String getEmail() {
