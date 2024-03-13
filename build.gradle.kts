@@ -71,6 +71,11 @@ tasks.jacocoTestReport {
     }
 }
 
+System.setProperty("http.proxyHost", "http://cache-iutl.univ-artois.fr")
+System.setProperty("http.proxyPort", "3128")
+System.setProperty("https.proxyHost", "http://cache-iutl.univ-artois.fr")
+System.setProperty("https.proxyPort", "3128")
+
 
 
 
