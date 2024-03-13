@@ -31,7 +31,7 @@ public class BandDto {
 	private LocalDateTime dateUpdate;
 	
 	public BandDto() {
-		
+		// Should be empty : default constructor
 	}
 	
 	public int getId() {

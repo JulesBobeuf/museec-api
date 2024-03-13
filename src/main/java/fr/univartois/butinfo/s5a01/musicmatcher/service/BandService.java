@@ -95,10 +95,8 @@ public class BandService {
 		Band band = optionalBand.get();
 		ApiUser user = optionalUser.get();
 		
-		if (band.getOwner() != user.getId()) {
-			if (user.getRole() != Role.ADMINISTRATOR) {
+		if (band.getOwner() != user.getId() &&  (user.getRole() != Role.ADMINISTRATOR)) {
 	            throw new IllegalArgumentException("Forbidden");
-			}
 		}
 		
 		// make sure the new owner exists
@@ -136,10 +134,9 @@ public class BandService {
 		ApiUser user = optionalUser.get();
 		
 		// if the user is trying to delete a band that is not his, make sure it's an administrator.
-		if (band.getOwner() != user.getId()) {
-			if (user.getRole() != Role.ADMINISTRATOR) {
+		if (band.getOwner() != user.getId() &&  (user.getRole() != Role.ADMINISTRATOR)) {
 	            throw new IllegalArgumentException("Forbidden");
-			}
+			
 		}
 		bandRepository.delete(band);
 		return true;

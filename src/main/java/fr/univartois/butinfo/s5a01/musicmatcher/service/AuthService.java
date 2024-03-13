@@ -92,7 +92,7 @@ public class AuthService implements UserDetailsService {
         	return false;
     	}
     	ApiUser user = CreateUserRequestToApiUserMapper.INSTANCE.createUserRequestToApiUser(request);
-        user = initUser(user);
+        initUser(user);
     	user.setPassword(passwordEncoder.encode(request.getPassword()));
     	
     	userRepository.save(user);
@@ -112,8 +112,7 @@ public class AuthService implements UserDetailsService {
     	if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
     	    Authentication authentication = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
     	    SecurityContextHolder.getContext().setAuthentication(authentication);
-    	    String jwt = jwtService.generateToken(user);
-            return jwt;
+            return jwtService.generateToken(user);
     	}
     	return errorMsg;
     }

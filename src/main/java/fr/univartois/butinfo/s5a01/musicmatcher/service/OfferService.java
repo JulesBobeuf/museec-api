@@ -82,10 +82,8 @@ public class OfferService {
     	
     	Band realBand = band.get();
     	
-    	if (realBand.getOwner() != realOwner.getId()) {
-			if (realOwner.getRole() != Role.ADMINISTRATOR) {
-	            throw new IllegalArgumentException("Forbidden");
-			}
+    	if (realBand.getOwner() != realOwner.getId() &&  (realOwner.getRole() != Role.ADMINISTRATOR)) {
+	        throw new IllegalArgumentException("Forbidden");
 		}
     	
     	if (realMusician.isLookingForAGroup() && realMusician.getIdBand() == -1 && realOffer.getAwaitingMembers().contains(realMusician.getId())) {
@@ -122,10 +120,9 @@ public class OfferService {
     	
     	Band realBand = band.get();
     	
-    	if (realBand.getOwner() != realOwner.getId()) {
-			if (realOwner.getRole() != Role.ADMINISTRATOR) {
+    	if (realBand.getOwner() != realOwner.getId() &&  (realOwner.getRole() != Role.ADMINISTRATOR)) {
 	            throw new IllegalArgumentException("Forbidden");
-			}
+			
 		}
     	
     	if (realOffer.getAwaitingMembers().contains(realMusician.getId())) {
