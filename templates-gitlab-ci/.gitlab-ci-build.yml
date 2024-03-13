@@ -1,12 +1,24 @@
 server_build:
   stage: build
   image: "cache-ili.univ-artois.fr/proxy_cache/library/gradle:8.5.0-jdk17"
-  script:
-    - gradle build
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
   tags:
     - docker2
   allow_failure: false
+  script:
+    - gradle clean
+    - gradle build --refresh-dependencies
+    - gradle bootJar
+  artifacts:
+      name: Museec-$CI_COMMIT_SHA-jar
+      expire_in: 10 mins 0 sec
+      paths:
+         - build/libs/*.jar
+      name: Museec-$CI_COMMIT_SHA-war
+      expire_in: 10 mins 0 sec
+      paths:
+         - build/libs/*.war
+  
   

@@ -35,8 +35,11 @@ dependencies {
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
-	compileOnly("org.projectlombok:lombok:1.18.30")
-	
+	compileOnly("org.projectlombok:lombok:1.18.30")	
+}
+
+springBoot {
+    mainClass.set( "fr.univartois.butinfo.s5a01.musicmatcher.MusicMatcherApplication")
 }
 
 tasks.withType<Test> {
@@ -61,6 +64,7 @@ tasks.jacocoTestReport {
         csv.required = true
     }
 }
+
 
 
 
