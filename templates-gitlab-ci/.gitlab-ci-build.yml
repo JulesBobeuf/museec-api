@@ -8,17 +8,13 @@ server_build:
     - docker2
   allow_failure: false
   script:
-    - gradle clean
     - gradle build --refresh-dependencies
+    - gradle clean
     - gradle bootJar
   artifacts:
-      name: Museec-$CI_COMMIT_SHA-jar
+      name: museec-executables-$CI_COMMIT_SHA
       expire_in: 10 mins 0 sec
       paths:
-         - build/libs/*.jar
-      name: Museec-$CI_COMMIT_SHA-war
-      expire_in: 10 mins 0 sec
-      paths:
-         - build/libs/*.war
+         - build/libs/
   
   
