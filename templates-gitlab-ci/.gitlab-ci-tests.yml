@@ -1,5 +1,5 @@
-build_application:
-  stage: build
+unit_tests:
+  stage: test
   image: "cache-ili.univ-artois.fr/proxy_cache/library/gradle:8.5.0-jdk17"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
@@ -8,13 +8,6 @@ build_application:
     - docker2
   allow_failure: false
   script:
-    - gradle build --refresh-dependencies --debug
+    - gradle build --refresh-dependencies
     - gradle clean
-    - gradle bootJar
-  artifacts:
-      name: museec-executables-$CI_COMMIT_SHA
-      expire_in: 10 mins 0 sec
-      paths:
-         - build/libs/
-  
-  
+    - gradle test
