@@ -11,10 +11,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateOfferDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
-import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateBandDtoToBandMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateOfferDtoToOfferMapper;
-import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUserRequestToApiUserMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.OfferRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
@@ -30,6 +27,9 @@ public class OfferService {
 	
 	@Autowired
 	private BandRepository bandRepository;
+	
+	@Autowired
+	private SequenceGeneratorService sequenceService;
 
     /**
      * Method that allows a user to accept an offer
@@ -151,7 +151,7 @@ public class OfferService {
     	}
     	
     	ApiUser realOwner = owner.get();
-    	Optional<Band> band = bandRepository.findById(offer.getIdBand());
+    	Optional<Band> band = bandRepository.findById(realOwner.getIdBand());
     	
     	if (band.isEmpty()) {
     		return false;
@@ -159,12 +159,16 @@ public class OfferService {
     	
     	Band realBand = band.get();
     	
-    	if (realBand.getOwner() != realOwner.getId()) {
-			if (realOwner.getRole() != Role.ADMINISTRATOR) {
-	            throw new IllegalArgumentException("Forbidden");
-			}
+    	if (realBand.getOwner() != realOwner.getId() && realOwner.getRole() != Role.ADMINISTRATOR) {
+    		throw new IllegalArgumentException("Forbidden");
 		}
     	
-    	return false;
+    	offer.setId(sequenceService.generateSequence(Offer.SEQUENCE_NAME));
+    	offer.setIdBand(realBand.getId());
+    	LocalDateTime dateNow = LocalDateTime.now();
+		offer.setDateCreation(dateNow);
+		offer.setDateUpdate(dateNow);
+		offer.setActive(true);
+    	return true;
     }
 }

@@ -1,5 +1,6 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.document;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,6 +21,11 @@ import lombok.Builder;
 @Builder
 public class Offer {
 
+	/**
+	 * Name of the sequence in the database.
+	 */
+	public static final String SEQUENCE_NAME = "offersequence";
+	
 	@Id
 	private int id;
 	@NotNull
@@ -54,10 +60,10 @@ public class Offer {
 	private Set<Integer> awaitingMembers;
 	@NotNull
 	@DateTimeFormat
-	private Date dateCreation;
+	private LocalDateTime dateCreation;
 	@NotNull
 	@DateTimeFormat
-	private Date dateUpdate;
+	private LocalDateTime dateUpdate;
 	@NotNull
 	private boolean isActive;
 	
@@ -136,16 +142,16 @@ public class Offer {
 	public void setAwaitingMembers(Set<Integer> awaitingMembers) {
 		this.awaitingMembers = awaitingMembers;
 	}
-	public Date getDateCreation() {
+	public LocalDateTime getDateCreation() {
 		return dateCreation;
 	}
-	public void setDateCreation(Date dateCreation) {
+	public void setDateCreation(LocalDateTime dateCreation) {
 		this.dateCreation = dateCreation;
 	}
-	public Date getDateUpdate() {
+	public LocalDateTime getDateUpdate() {
 		return dateUpdate;
 	}
-	public void setDateUpdate(Date dateUpdate) {
+	public void setDateUpdate(LocalDateTime dateUpdate) {
 		this.dateUpdate = dateUpdate;
 	}
 	

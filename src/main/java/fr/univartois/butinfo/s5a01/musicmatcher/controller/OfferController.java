@@ -87,7 +87,7 @@ public class OfferController {
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
-	@PostMapping("/createuser")
+	@PostMapping("/createOffer")
 	@ResponseBody
 	public ResponseEntity<String> createOffer(@Valid @RequestBody CreateUpdateOfferDto request,Authentication authentication) {
 		boolean wasCreated = offerService.createOffer(request,authentication.getName());
