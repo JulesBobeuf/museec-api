@@ -2,6 +2,7 @@ package fr.univartois.butinfo.s5a01.musicmatcher.auth;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,24 +20,22 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	private static final String AUTH_PATH = "/api/auth";
+	@Value("${auth-path}")
+	private String authPath;
 
 	private final JwtService jwtService;
 	private final UserDetailsService userDetailsService;
-	private final TokenRepository tokenRepository;
 
-	public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService,
-			TokenRepository tokenRepository) {
+	public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
 		super();
 		this.jwtService = jwtService;
 		this.userDetailsService = userDetailsService;
-		this.tokenRepository = tokenRepository;
 	}
 
 	@Override
 	protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
 			@NonNull FilterChain filterChain) throws ServletException, IOException {
-		if (request.getServletPath().contains(AUTH_PATH)) {
+		if (request.getServletPath().contains(authPath)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -47,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
+		
 		jwt = authHeader.substring(7);
 		userEmail = jwtService.extractUsername(jwt);
 		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -61,3 +61,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 }
+

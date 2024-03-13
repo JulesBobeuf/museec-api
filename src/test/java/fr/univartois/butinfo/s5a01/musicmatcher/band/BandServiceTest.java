@@ -142,6 +142,9 @@ class BandServiceTest {
 		user2.setRole(Role.ADMINISTRATOR);
 		user2.setIdBand(-1);
 		
+		// repo returns null, so false
+		assertThat(bandService.createBand(band, email)).isFalse();
+		
 		when(userRepository.findById(1)).thenReturn(Optional.of(user));
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 		when(userRepository.findByEmail(email2)).thenReturn(Optional.of(user2));
@@ -153,8 +156,6 @@ class BandServiceTest {
 
 		// An admin can create a band for anyone. a User can create a band only for himself
 		assertThat(bandService.createBand(band, email)).isFalse();
-		
-		
 	}
 
 
@@ -165,7 +166,7 @@ class BandServiceTest {
 		CreateUpdateBandDto bandDto = new CreateUpdateBandDto();
 		bandDto.setName("hey");
 		bandDto.setDescription("hey");
-		bandDto.setOwner(0); //change the owner, so executing the request twice won't work
+		bandDto.setOwner(1);
 		bandDto.setProfilePicture("./img.png");
 		bandDto.setVideoLink("https://youtube.com");
 		
@@ -184,11 +185,16 @@ class BandServiceTest {
 		user.setEmail(email);
 		user.setIdBand(1);
 		
-		when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
-		when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
+		// repo returns nothing so false
+		assertThat(bandService.updateBand(1, bandDto, email)).isFalse();
+		
+		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+		when(userRepository.findById(1)).thenReturn(Optional.of(user));
 		when(bandRepository.findById(1)).thenReturn(Optional.of(band));
 		
-		assertThat(bandService.updateBand(1, bandDto, email)).isEqualTo(true);
+		assertThat(bandService.updateBand(1, bandDto, email)).isTrue();
+		
+		band.setOwner(1093871);
 		
         assertThrows(IllegalArgumentException.class, new Executable() {
             
@@ -200,7 +206,11 @@ class BandServiceTest {
         
         user.setRole(Role.ADMINISTRATOR); // an admin won't get a forbidden error.
 		assertThat(bandService.updateBand(1, bandDto, email)).isTrue();
-        
+		
+		bandDto.setOwner(67169);
+		// user does not exists, so the following is false.
+		assertThat(bandService.updateBand(1, bandDto, email)).isFalse();
+
 	}
 	
 	@Test
@@ -221,6 +231,9 @@ class BandServiceTest {
 		user.setId(1);
 		user.setEmail(email);
 		user.setIdBand(1);
+		
+		// repo returns nothing, so should be false
+		assertThat(bandService.deleteBand(1, email)).isFalse();
 		
 		when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 		when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));

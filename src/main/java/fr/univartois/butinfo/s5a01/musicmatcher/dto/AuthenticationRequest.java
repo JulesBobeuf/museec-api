@@ -20,6 +20,7 @@ public class AuthenticationRequest {
     }
 
     public AuthenticationRequest() {
+		// Should be empty : default constructor
     }
 
     public String getEmail() {

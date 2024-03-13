@@ -19,7 +19,7 @@ public class CreateUpdateBandDto {
 	private String videoLink;
 	
 	public CreateUpdateBandDto() {
-		
+		// Should be empty : default constructor
 	}
 	
 	public String getName() {

@@ -68,7 +68,7 @@ public class Offer {
 	private boolean isActive;
 	
 	public Offer() {
-		
+		// Should be empty : default constructor
 	}
 	public int getId() {
 		return id;
