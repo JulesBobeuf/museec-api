@@ -116,7 +116,7 @@ public class UserController {
 		if (result) {
 			return ResponseEntity.ok("User was unbanned");
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found"); 
 	}
 	
 }
