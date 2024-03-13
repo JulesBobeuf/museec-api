@@ -13,7 +13,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 
 @SpringBootTest()
-public class ApiUserTest {
+class ApiUserTest {
 
 	@Test
 	void testUserDetailsInterface() {

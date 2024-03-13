@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
@@ -52,10 +54,10 @@ class OfferServiceTest {
 		offer.setAwaitingMembers(new HashSet<>());
 		when(offerRepository.findById(1)).thenReturn(Optional.of(offer));
 		
-		assertThat(offerService.accepteOffer(1,1)).isTrue();
-		assertThat(offerService.accepteOffer(0,1)).isFalse();
-		assertThat(offerService.accepteOffer(1,0)).isFalse();
-		assertThat(offerService.accepteOffer(2,1)).isFalse();
+		assertThat(offerService.acceptOffer(1,1)).isTrue();
+		assertThat(offerService.acceptOffer(0,1)).isFalse();
+		assertThat(offerService.acceptOffer(1,0)).isFalse();
+		assertThat(offerService.acceptOffer(2,1)).isFalse();
 	}
 
 	@Test
@@ -134,6 +136,7 @@ class OfferServiceTest {
 		assertThat(offerService.acceptMusician(email1,2,1)).isFalse();
 		assertThat(offerService.acceptMusician(email1,2,2)).isFalse();
 		assertThat(offerService.acceptMusician("Thomas@gmail.com",3,1)).isFalse();
+		assertThat(offerService.acceptMusician(email1,3,2)).isFalse();
 		assertThat(offerService.acceptMusician(email1,3,4)).isTrue();
 	}
 	
@@ -145,7 +148,16 @@ class OfferServiceTest {
 		String email1 = "Jules@gmail.com";
 		owner1.setEmail(email1);
 		when(userRepository.findById(1)).thenReturn(Optional.of(owner1));
-		when(userRepository.findByEmail("Jules@gmail.com")).thenReturn(Optional.of(owner1));
+		when(userRepository.findByEmail(email1)).thenReturn(Optional.of(owner1));
+		
+		ApiUser owner2 = new ApiUser();
+		owner2.setId(2);
+		owner2.setIdBand(-1);
+		String email2 = "Jules2@gmail.com";
+		owner2.setEmail(email2);
+		owner2.setRole(Role.ADMINISTRATOR);
+		when(userRepository.findById(2)).thenReturn(Optional.of(owner2));
+		when(userRepository.findByEmail(email2)).thenReturn(Optional.of(owner2));
 		
 		ApiUser musician1 = new ApiUser();
 		musician1.setId(2);
@@ -158,17 +170,20 @@ class OfferServiceTest {
 		
 		Offer offer3 = new Offer();
 		offer3.setId(3);
-		offer3.setAwaitingMembers(Set.of(4));
+		offer3.setAwaitingMembers(Set.of(2));
+		HashSet<Integer> set = new HashSet<>();
+		set.addAll(List.of(99,98,97));
+		offer3.setUsersThatRejected(set);
+		offer3.setIdBand(1);
 		offer3.setActive(true);
 		when(offerRepository.findById(3)).thenReturn(Optional.of(offer3));
 		
 		Band band1 = new Band();
 		band1.setId(1);
 		band1.setOwner(1);
-		offer3.setIdBand(1);
 		
 		when(bandRepository.findById(0)).thenReturn(Optional.empty());
-		when(bandRepository.findById(1)).thenReturn(Optional.of(band1));
+		when(bandRepository.findById(band1.getId())).thenReturn(Optional.of(band1));
 		
 		assertThat(offerService.rejectMusician("un",0,0)).isFalse();
 		assertThat(offerService.rejectMusician(email1,0,0)).isFalse();
@@ -180,7 +195,9 @@ class OfferServiceTest {
 		assertThat(offerService.rejectMusician(email1,1,1)).isFalse();
 		assertThat(offerService.rejectMusician("Thomas@gmail.com",3,1)).isFalse();
 		assertThat(offerService.rejectMusician("Thomas@gmail.com",3,4)).isFalse();
-		assertThat(offerService.rejectMusician(email1,3,4)).isFalse();
+		assertThat(offerService.rejectMusician(email1,1,2)).isFalse();
+		assertThat(offerService.rejectMusician(email1,3,2)).isTrue();
+		assertThat(offerService.rejectMusician(email2,3,2)).isTrue();
 	}
 	
 }

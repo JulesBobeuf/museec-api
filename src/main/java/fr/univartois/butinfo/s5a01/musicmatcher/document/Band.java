@@ -40,7 +40,7 @@ public class Band {
 	private LocalDateTime dateUpdate;
 	
 	public Band() {
-		
+		// Should be empty : default constructor
 	}
 	
 	public int getId() {

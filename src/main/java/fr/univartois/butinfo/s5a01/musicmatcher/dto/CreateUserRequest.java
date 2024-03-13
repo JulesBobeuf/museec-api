@@ -58,7 +58,7 @@ public class CreateUserRequest {
 	private String confirmPassword;
 	
 	public CreateUserRequest() {
-		
+		// Should be empty : default constructor
 	}
 
 	public String getFirstName() {

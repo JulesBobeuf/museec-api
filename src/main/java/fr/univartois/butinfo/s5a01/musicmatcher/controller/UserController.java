@@ -31,6 +31,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/user")
 public class UserController {
  
+	private static final String USER_WAS_NOT_FOUND_MESSAGE = "User was not found";
+	
 	@Autowired
 	private UserService userService;
 	
@@ -70,7 +72,7 @@ public class UserController {
 		if (wasUpdated) {
 			return ResponseEntity.ok("User was updated Successfully");
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_WAS_NOT_FOUND_MESSAGE);
 	}
 	
 	
@@ -85,7 +87,7 @@ public class UserController {
 		if (wasDeleted) {
 			return ResponseEntity.ok("User was deleted successfully");
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_WAS_NOT_FOUND_MESSAGE);
 	}
 	
 	
@@ -101,7 +103,7 @@ public class UserController {
 		if (result) {
 			return ResponseEntity.ok("User was banned");
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_WAS_NOT_FOUND_MESSAGE);
 	}
 
 	@Operation(summary = "unbanUser", description = "Unban a user", tags = { "User" })
@@ -116,7 +118,7 @@ public class UserController {
 		if (result) {
 			return ResponseEntity.ok("User was unbanned");
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User was not found"); 
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_WAS_NOT_FOUND_MESSAGE); 
 	}
 	
 }

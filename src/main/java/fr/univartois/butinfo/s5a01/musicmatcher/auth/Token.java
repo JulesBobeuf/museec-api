@@ -10,15 +10,15 @@ import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 public class Token {
 
 	@Id
-	public Integer id;
+	private Integer id;
 
-	public String token;
+	private String tokenValue;
 
-	public TokenType tokenType = TokenType.BEARER;
+	private TokenType tokenType = TokenType.BEARER;
 
-	public boolean revoked;
+	private boolean revoked;
 
-	public boolean expired;
+	private boolean expired;
 
 	@DocumentReference()
 	public ApiUser user;
@@ -26,7 +26,7 @@ public class Token {
 	public Token(Integer id, String token, TokenType tokenType, boolean revoked, boolean expired, ApiUser user) {
 		super();
 		this.id = id;
-		this.token = token;
+		this.tokenValue = token;
 		this.tokenType = tokenType;
 		this.revoked = revoked;
 		this.expired = expired;
@@ -36,14 +36,14 @@ public class Token {
 	public Token(Integer id, String token, boolean revoked, boolean expired, ApiUser user) {
 		super();
 		this.id = id;
-		this.token = token;
+		this.tokenValue = token;
 		this.revoked = revoked;
 		this.expired = expired;
 		this.user = user;
 	}
 
 	public Token() {
-		// TODO Auto-generated constructor stub
+		// should be empty
 	}
 
 	public Integer getId() {
@@ -55,11 +55,11 @@ public class Token {
 	}
 
 	public String getToken() {
-		return token;
+		return tokenValue;
 	}
 
 	public void setToken(String token) {
-		this.token = token;
+		this.tokenValue = token;
 	}
 
 	public TokenType getTokenType() {

@@ -204,7 +204,7 @@ class UserServiceTest {
 		when(userRepository.findById(1)).thenReturn(Optional.of(user));
 		when(userRepository.findById(2)).thenReturn(Optional.of(user2));
 
-		assertThat(userService.deleteUser(1, email)).isEqualTo(true);
+		assertThat(userService.deleteUser(1, email)).isTrue();
 
 		user.setId(0);
 
@@ -217,7 +217,7 @@ class UserServiceTest {
 		});
 
 		user.setRole(Role.ADMINISTRATOR);
-		assertThat(userService.deleteUser(1, "toto313@€xample.org")).isEqualTo(true);
+		assertThat(userService.deleteUser(1, "toto313@€xample.org")).isTrue();
 
 	}
 }
