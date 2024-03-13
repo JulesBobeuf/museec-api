@@ -42,6 +42,8 @@ public class UpdateUserRequest {
 	private Set<MusicStyle> musicStyles;
 	@NotNull
 	private Country country;
+	@NotNull
+	private int idBand;
 	
 	public UpdateUserRequest() {
 		
@@ -112,6 +114,14 @@ public class UpdateUserRequest {
 	}
 	public void setCountry(Country country) {
 		this.country = country;
+	}
+
+	public int getIdBand() {
+		return idBand;
+	}
+
+	public void setIdBand(int idBand) {
+		this.idBand = idBand;
 	}
 	
 	

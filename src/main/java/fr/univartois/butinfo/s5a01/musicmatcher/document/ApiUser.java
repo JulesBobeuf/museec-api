@@ -99,7 +99,7 @@ public class ApiUser implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return email;
+		return getEmail();
 	}
 
 
@@ -235,13 +235,9 @@ public class ApiUser implements UserDetails {
 		return dateUpdate;
 	}
 
-	public void updateDateUpdate() {
-		this.dateUpdate = LocalDateTime.now();
-	}
-
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
