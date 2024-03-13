@@ -3,18 +3,25 @@ package fr.univartois.butinfo.s5a01.musicmatcher.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateOfferDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateOfferDtoToOfferMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.OfferService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @Tag(name = "Offer", description = "Gestion of offers")
 @RestController
@@ -74,6 +81,20 @@ public class OfferController {
 			return ResponseEntity.ok("Musician rejectef of the band");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Musician, owner or offer was not found");
+	}
+	
+	@Operation(summary = "createOffer", description = "Create an offer", tags = { "Offer" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PostMapping("/createuser")
+	@ResponseBody
+	public ResponseEntity<String> createOffer(@Valid @RequestBody CreateUpdateOfferDto request,Authentication authentication) {
+		boolean wasCreated = offerService.createOffer(request,authentication.getName());
+		if (wasCreated) {
+			return ResponseEntity.ok("Offer created successfully");
+		}
+		return ResponseEntity.badRequest().body("Offer could not be created. Bad request");
 	}
 
 }

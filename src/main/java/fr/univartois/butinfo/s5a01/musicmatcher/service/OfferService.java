@@ -1,5 +1,6 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,11 @@ import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateOfferDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateBandDtoToBandMapper;
+import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateOfferDtoToOfferMapper;
+import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUserRequestToApiUserMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.OfferRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
@@ -135,4 +141,30 @@ public class OfferService {
     	}
     	return false;
 	}
+	
+	public boolean createOffer(CreateUpdateOfferDto request, String email) {
+		Offer offer = CreateUpdateOfferDtoToOfferMapper.INSTANCE.createUpdateOfferDtoToOffer(request);
+		Optional<ApiUser> owner = userRepository.findByEmail(email);
+		
+    	if (owner.isEmpty()) {
+    		return false;
+    	}
+    	
+    	ApiUser realOwner = owner.get();
+    	Optional<Band> band = bandRepository.findById(offer.getIdBand());
+    	
+    	if (band.isEmpty()) {
+    		return false;
+    	}
+    	
+    	Band realBand = band.get();
+    	
+    	if (realBand.getOwner() != realOwner.getId()) {
+			if (realOwner.getRole() != Role.ADMINISTRATOR) {
+	            throw new IllegalArgumentException("Forbidden");
+			}
+		}
+    	
+    	return false;
+    }
 }
