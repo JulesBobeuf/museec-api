@@ -66,7 +66,7 @@ public class AuthServiceTest {
             public void execute() throws Throwable {
         		String email = "toto@example.com";
 				when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
-        		assertThat(authService.loadUserByUsername(email)).isEqualTo("User does not exist");
+        		assertThat(authService.loadUserByUsername(email)).isEqualTo(null);
         	}
         });
 	}

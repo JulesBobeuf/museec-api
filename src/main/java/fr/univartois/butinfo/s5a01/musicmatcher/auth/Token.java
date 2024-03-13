@@ -43,7 +43,7 @@ public class Token {
 	}
 
 	public Token() {
-		// TODO Auto-generated constructor stub
+		// should be empty
 	}
 
 	public Integer getId() {

@@ -18,9 +18,9 @@ public enum Role {
 
 	public List<GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> result = new ArrayList<>();
-		this.privileges.forEach((privilege) -> {
-			result.add(new SimpleGrantedAuthority(String.format("ROLE_%s", privilege.toString())));
-		});
+		this.privileges.forEach(privilege -> 
+			result.add(new SimpleGrantedAuthority(String.format("ROLE_%s", privilege.toString())))
+		);
 		return result;
 	}
 }
