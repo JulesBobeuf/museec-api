@@ -8,7 +8,7 @@ build_application:
     - docker2
   allow_failure: false
   script:
-    - ./gradlew clean build --refresh-dependencies --debug
+    - gradle clean build --refresh-dependencies --debug
     - gradle bootJar
   artifacts:
       name: museec-executables-$CI_COMMIT_SHA
