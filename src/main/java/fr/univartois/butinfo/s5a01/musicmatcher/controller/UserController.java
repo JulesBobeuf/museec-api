@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @Tag(name = "User", description = "User endpoint")
 @RestController
@@ -64,7 +65,7 @@ public class UserController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PutMapping("/{id}")
 	@ResponseBody
-	public ResponseEntity<String> updateUser(Authentication authentication, @PathVariable int id, @RequestBody UpdateUserRequest request) {
+	public ResponseEntity<String> updateUser(Authentication authentication, @PathVariable int id, @Valid @RequestBody UpdateUserRequest request) {
 		boolean wasUpdated = userService.updateUser(id, request, authentication.getName());
 		if (wasUpdated) {
 			return ResponseEntity.ok("User was updated Successfully");

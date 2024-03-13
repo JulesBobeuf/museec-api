@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @Tag(name = "Auth", description = "Authentication endpoint")
 @RestController
@@ -32,7 +33,7 @@ public class AuthController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PostMapping("/changepswrd")
 	@ResponseBody
-	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto dto) {
+	public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordDto dto) {
 		return ResponseEntity.ok(authService.changePassword(dto));
 	}
 
@@ -42,7 +43,7 @@ public class AuthController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PostMapping("/createuser")
 	@ResponseBody
-	public ResponseEntity<String> register(@RequestBody CreateUserRequest request) {
+	public ResponseEntity<String> register(@Valid @RequestBody CreateUserRequest request) {
 		boolean wasCreated = authService.createUser(request);
 		if (wasCreated) {
 			return ResponseEntity.ok("User registered successfully");
@@ -56,7 +57,11 @@ public class AuthController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PostMapping("/login")
 	@ResponseBody
-	public ResponseEntity<String> login(@RequestBody AuthenticationRequest request) {
-	    return ResponseEntity.ok(authService.login(request));
+	public ResponseEntity<String> login(@Valid @RequestBody AuthenticationRequest request) {
+	    String result = authService.login(request);
+	    if (result.contains("wrong credentials")) {
+	    	return ResponseEntity.status(401).body(result);
+	    }
+		return ResponseEntity.ok(result);
 	}
 }
