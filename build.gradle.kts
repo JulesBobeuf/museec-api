@@ -2,8 +2,6 @@ plugins {
 	java
 	war
 	jacoco
-	id("org.springframework.boot") version "3.2.2"
-	id("io.spring.dependency-management") version "1.1.4"
 	id("org.sonarqube") version "4.3.1.3277"
 	id("com.diffplug.eclipse.apt") version "3.26.0"
 }
@@ -70,12 +68,4 @@ tasks.jacocoTestReport {
         csv.required = true
     }
 }
-
-System.setProperty("http.proxyHost", "http://cache-iutl.univ-artois.fr")
-System.setProperty("http.proxyPort", "3128")
-System.setProperty("https.proxyHost", "http://cache-iutl.univ-artois.fr")
-System.setProperty("https.proxyPort", "3128")
-
-
-
 
