@@ -1,6 +1,6 @@
 build_application:
   stage: build
-  image: "cache-ili.univ-artois.fr/proxy_cache/library/gradle:8.5.0-jdk17"
+  image: "reg-iutl.univ-artois.fr/proxy_cache/library/gradle:8.5.0-jdk17"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
