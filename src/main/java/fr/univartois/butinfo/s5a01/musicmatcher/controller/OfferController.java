@@ -1,11 +1,16 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateOfferDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.OfferDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateOfferDtoToOfferMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.OfferService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,7 +84,7 @@ public class OfferController {
 	public ResponseEntity<String> rejectMusician(@RequestParam int idUser, @RequestParam int idOffer) {
 		boolean result = offerService.rejectOffer(idUser,idOffer);
 		if (result) {
-			return ResponseEntity.ok("Musician rejectef of the band");
+			return ResponseEntity.ok("Musician rejected of the band");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Musician, owner or offer was not found");
 	}
@@ -97,4 +103,61 @@ public class OfferController {
 		return ResponseEntity.badRequest().body("Offer could not be created. Bad request");
 	}
 
+	////////////////////////
+	///////////////////////
+	////////////////////////
+	//////////////////////
+	///////////////////////
+	/////////////////////
+	
+	@Operation(summary = "getOffer", description = "Get an offer", tags = { "Offer" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "4O4", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@GetMapping("/{id}")
+	@ResponseBody
+	public ResponseEntity<OfferDto> getOffer(@PathVariable int id) {
+		OfferDto offer = offerService.getOffer(id);
+		if (offer != null) {
+			return ResponseEntity.ok(offer);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	}
+	
+	@Operation(summary = "getOffers", description = "Get all offers", tags = { "Offer" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@GetMapping("/")
+	@ResponseBody
+	public ResponseEntity<List<OfferDto>> getAllOffers() {
+		return ResponseEntity.ok(offerService.getAllOffers());
+	}
+	
+	@Operation(summary = "updateOffer", description = "Update an offer", tags = { "Offer" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PutMapping("/{id}")
+	@ResponseBody
+	public ResponseEntity<String> updateOffer(Authentication authentication, @PathVariable int id, @Valid @RequestBody CreateUpdateOfferDto request) {
+		boolean wasUpdated = offerService.updateOffer(id, request, authentication.getName());
+		if (wasUpdated) {
+			return ResponseEntity.ok("The offer was updated successfully");
+
+		}
+		return ResponseEntity.badRequest().body("The offer could not be updated. Bad request");
+	}
+	
+	@Operation(summary = "deleteOffer", description = "Delete an oofer", tags = { "Offer" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@DeleteMapping("/{id}")
+	@ResponseBody
+	public ResponseEntity<String> deleteOffer(Authentication authentication, @PathVariable int id) {
+		boolean wasDeleted = offerService.deleteOffer(id, authentication.getName());
+		if (wasDeleted) {
+			return ResponseEntity.ok("The offer was deleted successfully");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The offer was not found");
+	}
+	
 }

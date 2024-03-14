@@ -1,6 +1,8 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,10 @@ import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateOfferDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.OfferDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.mapper.BandToBandDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateOfferDtoToOfferMapper;
+import fr.univartois.butinfo.s5a01.musicmatcher.mapper.OfferToOfferDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.OfferRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
@@ -140,6 +145,9 @@ public class OfferService {
     	return false;
 	}
 	
+    /**
+     * Method that allows an owner to create an offer
+     */
 	public boolean createOffer(CreateUpdateOfferDto request, String email) {
 		Offer offer = CreateUpdateOfferDtoToOfferMapper.INSTANCE.createUpdateOfferDtoToOffer(request);
 		Optional<ApiUser> owner = userRepository.findByEmail(email);
@@ -167,6 +175,104 @@ public class OfferService {
 		offer.setDateCreation(dateNow);
 		offer.setDateUpdate(dateNow);
 		offer.setActive(true);
+		offer.setAwaitingMembers(new HashSet<>());
+		offer.setUsersThatRejected(new HashSet<>());;
+		offerRepository.save(offer);
     	return true;
     }
+	
+	/////////////////////////
+	/////////////////////////
+	/////////////////////////
+	/////////////////////////
+	/////////////////////////
+	/////////////////////////
+	
+    /**
+     * Method that allows an owner to update an offer
+     */
+	public boolean updateOffer(int id, CreateUpdateOfferDto request, String email) {
+		Optional<Offer> optionalOffer = offerRepository.findById(id);
+		Optional<ApiUser> optionalOwner = userRepository.findByEmail(email);
+		
+    	if (optionalOwner.isEmpty() || optionalOffer.isEmpty()) {
+    		return false;
+    	}
+    	
+    	ApiUser owner = optionalOwner.get();
+    	Offer offer = optionalOffer.get();
+    	Optional<Band> band = bandRepository.findById(owner.getIdBand());
+    	
+    	if (band.isEmpty()) {
+    		return false;
+    	}
+    	
+    	Band realBand = band.get();
+    	
+    	if (realBand.getOwner() != owner.getId() && owner.getRole() != Role.ADMINISTRATOR) {
+    		throw new IllegalArgumentException("Forbidden");
+		}
+    	
+    	offer.setName(request.getName());
+		offer.setDescription(request.getDescription());
+		offer.setMusicStyles(request.getMusicStyles());
+		offer.setInstruments(request.getInstruments());
+		offer.setSkills(request.getSkills());
+		offer.setCountry(request.getCountry());
+		offer.setAgeMin(request.getAgeMin());
+		offer.setAgeMax(request.getAgeMax());
+		offer.setGender(request.getGender());
+		offer.setDateUpdate(LocalDateTime.now());
+		offerRepository.save(offer);
+    	return true;
+	}
+	
+    /**
+     * Method that allows an owner to delete an offer
+     */
+	public boolean deleteOffer(int id, String email) {
+		Optional<Offer> optionalOffer = offerRepository.findById(id);
+		Optional<ApiUser> optionalOwner = userRepository.findByEmail(email);
+		
+    	if (optionalOwner.isEmpty() || optionalOffer.isEmpty()) {
+    		return false;
+    	}
+    	
+    	ApiUser owner = optionalOwner.get();
+    	Offer offer = optionalOffer.get();
+    	Optional<Band> band = bandRepository.findById(owner.getIdBand());
+    	
+    	if (band.isEmpty()) {
+    		return false;
+    	}
+    	
+    	Band realBand = band.get();
+		// if the user is trying to delete a band that is not his, make sure it's an administrator.
+		if (realBand.getOwner() != owner.getId() &&  (owner.getRole() != Role.ADMINISTRATOR)) {
+	            throw new IllegalArgumentException("Forbidden");
+			
+		}
+		offerRepository.delete(offer);
+		return true;
+	}
+	
+    /**
+     * Method that allows an administrator to get all offers
+     */
+	public List<OfferDto> getAllOffers() {
+		List<Offer> allOffers = offerRepository.findAll();
+		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(allOffers);
+	}
+	
+    /**
+     * Method that allows to get an offer
+     */
+	public OfferDto getOffer(int id) {
+		Optional<Offer> optionalOffer = offerRepository.findById(id);
+		if (optionalOffer.isPresent()) {
+			return OfferToOfferDtoMapper.INSTANCE.offerToOfferDto(optionalOffer.get());
+		}
+		return null;
+	}
+
 }
