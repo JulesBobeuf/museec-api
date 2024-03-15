@@ -11,6 +11,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -35,11 +38,11 @@ public class Offer {
 	@Size(min = 2,max = 1000)
 	private String description;
 	@NotNull
-	private Set<String> musicStyles;
+	private Set<MusicStyle> musicStyles;
 	@NotNull
-	private Set<String> instruments;
+	private Set<Instrument> instruments;
 	@NotNull
-	private Set<String> skills;
+	private Set<Skill> skills;
 	@NotNull
 	private Country country;
 	@NotNull
@@ -88,22 +91,22 @@ public class Offer {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Set<String> getMusicStyles() {
+	public Set<MusicStyle> getMusicStyles() {
 		return musicStyles;
 	}
-	public void setMusicStyles(Set<String> musicStyles) {
+	public void setMusicStyles(Set<MusicStyle> musicStyles) {
 		this.musicStyles = musicStyles;
 	}
-	public Set<String> getInstruments() {
+	public Set<Instrument> getInstruments() {
 		return instruments;
 	}
-	public void setInstruments(Set<String> instruments) {
+	public void setInstruments(Set<Instrument> instruments) {
 		this.instruments = instruments;
 	}
-	public Set<String> getSkills() {
+	public Set<Skill> getSkills() {
 		return skills;
 	}
-	public void setSkills(Set<String> skills) {
+	public void setSkills(Set<Skill> skills) {
 		this.skills = skills;
 	}
 	public int getAgeMin() {

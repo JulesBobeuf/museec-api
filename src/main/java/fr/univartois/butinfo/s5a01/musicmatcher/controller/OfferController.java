@@ -102,13 +102,6 @@ public class OfferController {
 		}
 		return ResponseEntity.badRequest().body("Offer could not be created. Bad request");
 	}
-
-	////////////////////////
-	///////////////////////
-	////////////////////////
-	//////////////////////
-	///////////////////////
-	/////////////////////
 	
 	@Operation(summary = "getOffer", description = "Get an offer", tags = { "Offer" })
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
