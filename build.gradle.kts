@@ -1,3 +1,8 @@
+configurations {
+    create("dev")
+    create("prod")
+}
+
 plugins {
 	java
 	war
@@ -36,14 +41,26 @@ dependencies {
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	compileOnly("org.projectlombok:lombok:1.18.30")
-	
+}
+
+tasks.register<Copy>("copyProperties") {
+    from("src/main/resources/${project.findProperty("env") ?: "dev"}")
+    into("build/resources/main")
+}
+
+tasks.named("bootJar") {
+    dependsOn("copyProperties")
+}
+
+tasks.named("resolveMainClassName") {
+    dependsOn("copyProperties")
 }
 
 tasks.withType<Test> {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
-sonar {
+sonarqube {
     properties {
         property("sonar.projectKey", "sae5")
         property("sonar.host.url", "https://sonarqube.univ-artois.fr")
@@ -56,11 +73,8 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
-        reports {
+    reports {
         xml.required = true
         csv.required = true
     }
 }
-
-
-
