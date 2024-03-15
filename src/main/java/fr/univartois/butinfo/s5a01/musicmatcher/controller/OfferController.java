@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "Offer", description = "Gestion of offers")
+@Tag(name = "Offer", description = "Offer endpoint")
 @RestController
 @RequestMapping("/api/offers")
 public class OfferController {
