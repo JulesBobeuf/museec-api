@@ -7,6 +7,6 @@ public enum Skill {
 
 	MUSIC_THEORY,
 	CLIP_REALISATION,
-	AUDIO_MIXING;
-	
+	AUDIO_MIXING,
+	COMPOSING;
 }
