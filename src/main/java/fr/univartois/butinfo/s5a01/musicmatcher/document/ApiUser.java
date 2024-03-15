@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,7 +18,10 @@ import fr.univartois.butinfo.s5a01.musicmatcher.utils.History;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Document
@@ -35,16 +39,21 @@ public class ApiUser implements UserDetails {
 	@Id
 	private int id;
 	@NotNull
+	@Size(min = 2,max = 30)
 	private String firstName;
 	@NotNull
+	@Size(min = 2,max = 30)
 	private String lastName;
 	@NotNull
+	@Min(18)
+	@Max(100)
 	private int age;
 	@NotNull
 	private Gender gender;
 	@NotNull
 	private String profilePicture;
 	@NotNull
+	@Size(min = 2,max = 1000)
 	private String description;
 	@NotNull
 	private boolean isLookingForAGroup;
@@ -59,19 +68,23 @@ public class ApiUser implements UserDetails {
 	
 	@NotNull
 	private Country country;
-	
+	@NotNull
 	private int idBand;
 	@NotNull
 	private Role role;
 	@NotNull
+	@jakarta.validation.constraints.Size(min = 2,max = 100)
 	private String email;
 	@NotNull
+	@Size(min = 8,max = 30)
 	private String password;
 	@NotNull
 	private boolean isLocked;
 	@NotNull
+	@DateTimeFormat
 	private LocalDateTime dateCreation;
 	@NotNull
+	@DateTimeFormat
 	private LocalDateTime dateUpdate;
 
 	@Override
@@ -86,7 +99,7 @@ public class ApiUser implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return email;
+		return getEmail();
 	}
 
 
@@ -222,13 +235,9 @@ public class ApiUser implements UserDetails {
 		return dateUpdate;
 	}
 
-	public void updateDateUpdate() {
-		this.dateUpdate = LocalDateTime.now();
-	}
-
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override

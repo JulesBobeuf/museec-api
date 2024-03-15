@@ -209,14 +209,14 @@ public enum Country {
     ZAMBIA("Zambia"),
     ZIMBABWE("Zimbabwe");
 
-    private String country;
+    private String countryName;
  
     Country(String country) {
-        this.country = country;
+        this.countryName = country;
     }
  
-    public String getUrl() {
-        return country;
+    public String getCountryName() {
+        return countryName;
     }
 	
 }

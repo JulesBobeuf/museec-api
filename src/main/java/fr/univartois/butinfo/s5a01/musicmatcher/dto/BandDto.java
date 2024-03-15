@@ -2,19 +2,36 @@ package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class BandDto {
 	
 	private int id;
+	@NotNull
+	@Size(min = 2,max = 30)
 	private String name;
+	@NotNull
+	@Size(min = 2,max = 1000)
 	private String description;
+	@NotNull
+	@Size(min = 2,max = 30)
 	private int owner;
+	@NotNull
 	private String profilePicture;
+	@NotNull
 	private String videoLink;
+	@NotNull
+	@DateTimeFormat
 	private LocalDateTime dateCreation;
+	@NotNull
+	@DateTimeFormat
 	private LocalDateTime dateUpdate;
 	
 	public BandDto() {
-		
+		// Should be empty : default constructor
 	}
 	
 	public int getId() {

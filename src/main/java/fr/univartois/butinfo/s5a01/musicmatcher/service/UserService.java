@@ -17,6 +17,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 @Service
 public class UserService {
 	
+	private static final String FORBIDDEN_MESSAGE = "Forbidden";
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -34,22 +35,11 @@ public class UserService {
 	}
 	
 	public boolean updateUser(int id, UpdateUserRequest request, String email) {
-		Optional<ApiUser> optionalUser = userRepository.findById(id);
-		if (optionalUser.isEmpty()) {
+		ApiUser user = checkPermissions(id,email);
+		if (user == null) {
 			return false;
 		}
-		ApiUser user = optionalUser.get();
 		
-		// if the user is trying to update a user that is not himself, make sure it's an administrator.
-		if (! email.equals(user.getEmail())) {
-			Optional<ApiUser> optionalAdminUser = userRepository.findByEmail(email);
-			if (optionalAdminUser.isEmpty()) {
-	            throw new IllegalArgumentException("Forbidden");
-			}
-			if (optionalAdminUser.get().getRole() != Role.ADMINISTRATOR) {
-	            throw new IllegalArgumentException("Forbidden");
-			}
-		}
 		user.setAge(request.getAge());
 		user.setCountry(request.getCountry());
 		user.setDateUpdate(LocalDateTime.now());
@@ -63,7 +53,7 @@ public class UserService {
 		user.setLastName(request.getLastName());
 		user.setProfilePicture(request.getProfilePicture());
 		
-		user = userRepository.save(user);
+		userRepository.save(user);
 		return true;
 	}
 	
@@ -74,21 +64,9 @@ public class UserService {
 	 * @return
 	 */
 	public boolean deleteUser(int id, String email) {
-		Optional<ApiUser> optionalUser = userRepository.findById(id);
-		if (optionalUser.isEmpty()) {
+		ApiUser user = checkPermissions(id,email);
+		if (user == null) {
 			return false;
-		}
-		ApiUser user = optionalUser.get();
-		
-		// if the user is trying to delete a user that is not himself, make sure it's an administrator.
-		if (! email.equals(user.getEmail())) {
-			Optional<ApiUser> optionalAdminUser = userRepository.findByEmail(email);
-			if (optionalAdminUser.isEmpty()) {
-	            throw new IllegalArgumentException("Forbidden");
-			}
-			if (optionalAdminUser.get().getRole() != Role.ADMINISTRATOR) {
-	            throw new IllegalArgumentException("Forbidden");
-			}
 		}
 		userRepository.delete(user);
 		return true;
@@ -126,5 +104,31 @@ public class UserService {
     		userRepository.save(realUser);
     	}
     	return true;
+    }
+    
+    /**
+     * Check whether a user has permissions to update/delete a user (must be himself or be an admin)
+     * @param id
+     * @param email
+     * @return the user to update/delete
+     */
+    private ApiUser checkPermissions(int id, String email) {
+    	Optional<ApiUser> optionalUser = userRepository.findById(id);
+		if (optionalUser.isEmpty()) {
+			return null;
+		}
+		ApiUser user = optionalUser.get();
+		
+		// if the user is trying to delete a user that is not himself, make sure it's an administrator.
+		if (! email.equals(user.getEmail())) {
+			Optional<ApiUser> optionalAdminUser = userRepository.findByEmail(email);
+			if (optionalAdminUser.isEmpty()) {
+	            throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
+			}
+			if (optionalAdminUser.get().getRole() != Role.ADMINISTRATOR) {
+	            throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
+			}
+		}
+		return user;
     }
 }

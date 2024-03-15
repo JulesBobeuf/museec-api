@@ -92,7 +92,7 @@ public class AuthService implements UserDetailsService {
         	return false;
     	}
     	ApiUser user = CreateUserRequestToApiUserMapper.INSTANCE.createUserRequestToApiUser(request);
-        user = initUser(user);
+        initUser(user);
     	user.setPassword(passwordEncoder.encode(request.getPassword()));
     	
     	userRepository.save(user);
@@ -100,21 +100,21 @@ public class AuthService implements UserDetailsService {
     }
 
     public String login(AuthenticationRequest request) {
+    	String errorMsg = "Can't login : wrong credentials";
     	Optional<ApiUser> optionalUser = userRepository.findByEmail(request.getEmail());
     	if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User does not exist");
+        	return errorMsg;
     	}
     	ApiUser user = optionalUser.get();
     	if (user.isLocked()) {
-            throw new IllegalArgumentException("User is banned");
+        	return errorMsg;
     	}
     	if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
     	    Authentication authentication = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
     	    SecurityContextHolder.getContext().setAuthentication(authentication);
-    	    String jwt = jwtService.generateToken(user);
-            return jwt;
+            return jwtService.generateToken(user);
     	}
-    	return "Can't login : wrong credentials";
+    	return errorMsg;
     }
     
     /**
