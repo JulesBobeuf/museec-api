@@ -37,7 +37,6 @@ public class RecommendationService {
 		try {
 			uri = new URI(String.format("%srecommendation/jaccard", pythonServerPath));
 		} catch(URISyntaxException e) {
-			e.printStackTrace();
 			return Collections.emptyList();
 		}
 		

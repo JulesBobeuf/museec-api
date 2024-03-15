@@ -49,7 +49,7 @@ class OfferServiceTest {
 	private BandRepository bandRepository;
 
 	@Test
-	void accepteOfferTest() {
+	void acceptOfferTest() {
 		ApiUser user1 = new ApiUser();
 		user1.setId(1);
 		user1.setIdBand(-1);

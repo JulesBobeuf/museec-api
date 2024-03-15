@@ -68,7 +68,6 @@ public class ImageGenerationService {
 		try {
 			uri = new URI(String.format("%simage/generate", pythonServerPath));
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
 			return null;
 		}
 		ResponseEntity<byte[]> responseEntity = restTemplate.postForEntity(uri, requestBody, byte[].class);
@@ -80,7 +79,7 @@ public class ImageGenerationService {
 		try {
 			FileCopyUtils.copy(inputStream, new FileOutputStream(savePfp));
 		} catch (Exception e) {
-			e.printStackTrace();
+			//empty
 		}
 
 		user.setProfilePicture(filepath);
@@ -90,7 +89,6 @@ public class ImageGenerationService {
 			result = new FileInputStream(savePfp);
 		} catch (FileNotFoundException e) {
 			// should not happen but who knows
-			e.printStackTrace();
 			return null;
 		}
 		return result;
@@ -106,7 +104,6 @@ public class ImageGenerationService {
 		try {
 			uri = new URI(String.format("%simage/for-id", pythonServerPath));
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
 			return Collections.emptyList();
 		}
 		
@@ -132,7 +129,6 @@ public class ImageGenerationService {
 		try {
 			uri = new URI(String.format("%simage/by-path", pythonServerPath));
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
 			return null;
 		}
 		ResponseEntity<byte[]> responseEntity = restTemplate.postForEntity(uri, requestBody, byte[].class);

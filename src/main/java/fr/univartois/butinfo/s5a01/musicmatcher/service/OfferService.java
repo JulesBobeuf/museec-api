@@ -37,7 +37,6 @@ public class OfferService {
 	
 	@Autowired
 	private SequenceGeneratorService sequenceService;
-
     /**
      * Method that allows a user to accept an offer
      */
@@ -59,7 +58,7 @@ public class OfferService {
     /**
      * Method that allows a user to reject an offer
      */
-    public boolean rejectOffer(int idUser, int idOffer) {
+    public Boolean rejectOffer(int idUser, int idOffer) {
     	Optional<ApiUser> user = userRepository.findById(idUser);
     	Optional<Offer> offer = offerRepository.findById(idOffer);
     	if (user.isEmpty() || offer.isEmpty()) {
@@ -166,7 +165,7 @@ public class OfferService {
     	Band realBand = band.get();
     	
     	if (realBand.getOwner() != realOwner.getId() && realOwner.getRole() != Role.ADMINISTRATOR) {
-    		throw new IllegalArgumentException("Forbidden");
+    		throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
 		}
     	
     	offer.setId(sequenceService.generateSequence(Offer.SEQUENCE_NAME));

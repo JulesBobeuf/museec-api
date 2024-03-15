@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateOfferDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.OfferDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateOfferDtoToOfferMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.OfferService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +38,7 @@ public class OfferController {
 	@Operation(summary = "acceptOffer", description = "Accept an offer", tags = { "Offer" })
 	@ApiResponse(responseCode = "200", description = "Offer Accepted Successfully", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", description = "User/Offer was not found", content = { @Content(schema = @Schema()) })
-	@GetMapping("/acceptOffer")
+	@GetMapping("/accept")
 	@ResponseBody
 	public ResponseEntity<String> accepteOffer(@RequestParam int idUser, @RequestParam int idOffer) {
 		boolean result = offerService.acceptOffer(idUser,idOffer);
@@ -53,12 +51,12 @@ public class OfferController {
 	@Operation(summary = "rejectOffer", description = "Reject an offer", tags = { "Offer" })
 	@ApiResponse(responseCode = "200", description = "Offer rejected Successfully", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", description = "User/Offer was not found", content = { @Content(schema = @Schema()) })
-	@GetMapping("/rejectOffer")
+	@GetMapping("/reject")
 	@ResponseBody
 	public ResponseEntity<String> rejectOffer(@RequestParam int idUser, @RequestParam int idOffer) {
 		boolean result = offerService.rejectOffer(idUser,idOffer);
 		if (result) {
-			return ResponseEntity.ok("Offer rejected succefully");
+			return ResponseEntity.ok("User was unbanned");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or offer was not found");
 	}
@@ -135,7 +133,6 @@ public class OfferController {
 		boolean wasUpdated = offerService.updateOffer(id, request, authentication.getName());
 		if (wasUpdated) {
 			return ResponseEntity.ok("The offer was updated successfully");
-
 		}
 		return ResponseEntity.badRequest().body("The offer could not be updated. Bad request");
 	}
