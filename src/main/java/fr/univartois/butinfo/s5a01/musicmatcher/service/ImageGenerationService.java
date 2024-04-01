@@ -94,6 +94,7 @@ public class ImageGenerationService {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<String> getImagesPath(int userid) {
 		Optional<ApiUser> optionalUser = userRepository.findById(userid);
 		if (optionalUser.isEmpty()) {
@@ -111,8 +112,7 @@ public class ImageGenerationService {
 		requestBody.put("id", String.valueOf(userid));
 		
 		ResponseEntity<Map> responseEntity = restTemplate.postForEntity(uri, requestBody, Map.class);
-		List<String> result = (List<String>) responseEntity.getBody().get("file_list");
-		return result;
+		return (List<String>) responseEntity.getBody().get("file_list");
 	}
 	
 	public InputStream retrieveGeneratedImage(RetrieveDeleteGeneratedImageDto request) {
@@ -133,9 +133,8 @@ public class ImageGenerationService {
 		}
 		ResponseEntity<byte[]> responseEntity = restTemplate.postForEntity(uri, requestBody, byte[].class);
 		byte[] responseBody = responseEntity.getBody();
-		InputStream result = new ByteArrayInputStream(responseBody);
-
-		return result;
+		
+		return new ByteArrayInputStream(responseBody);
 	}
 	
 	public boolean deleteGeneratedImage(RetrieveDeleteGeneratedImageDto request) {
