@@ -7,6 +7,15 @@ unit_tests:
     - docker2
   allow_failure: false
   script:
-    - gradle build --refresh-dependencies
-    - gradle clean
-    - gradle test
+    - $GRADLE_CMD -Penv=qual clean
+    - $GRADLE_CMD -Penv=qual test
+
+sonarqube:
+  stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
+  tags:
+    - docker2
+  allow_failure: false
+  script:
+    - $GRADLE_CMD sonar -D sonar.login=$SONARQUBE_TOKEN -Penv=qual
