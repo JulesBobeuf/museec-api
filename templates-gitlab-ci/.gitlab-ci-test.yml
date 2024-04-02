@@ -1,17 +1,21 @@
 unit_tests:
   stage: test
+  dependencies:
+    - build_application
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
   tags:
     - docker2
-  allow_failure: false
+  allow_failure: true # Database doesn't exist
   script:
     - $GRADLE_CMD -Penv=qual clean
     - $GRADLE_CMD -Penv=qual test
 
 sonarqube:
   stage: test
+  dependencies:
+    - unit_tests
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
   tags:
