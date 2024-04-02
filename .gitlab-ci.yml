@@ -7,7 +7,7 @@ stages:
 image: "cache-ili.univ-artois.fr/proxy_cache/library/maven:3.8.4-openjdk-11"
 
 variables:
-  GRADLE_CMD: gradle -Dhttp.proxyHost=$PROXY_HTTP -Dhttp.proxyPort=$PROXY_PORT -Dhttps.proxyHost=$PROXY_HTTPS -Dhttps.proxyPort=$PROXY_PORT
+  GRADLE_CMD: gradle -Dhttp.proxyHost=$PROXY_HTTP -Dhttp.proxyPort=$PROXY_PORT -Dhttps.proxyHost=$PROXY_HTTPS -Dhttps.proxyPort=$PROXY_PORT -Dhttps.proxyUser=$USERNAME -DHttps.passport=$ENT_PASSWORD
 
 include:
   # build
