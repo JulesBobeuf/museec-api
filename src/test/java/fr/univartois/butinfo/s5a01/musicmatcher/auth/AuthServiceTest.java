@@ -19,12 +19,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.ApiUserDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.AuthenticationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ChangePasswordDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.AuthService;
+import fr.univartois.butinfo.s5a01.musicmatcher.service.SequenceGeneratorService;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
@@ -42,6 +42,9 @@ class AuthServiceTest {
 	
 	@MockBean
 	private UserRepository userRepository;
+	
+	@MockBean
+	private SequenceGeneratorService sequenceService;
 	
 	@Test
 	void loadUserByUsernameWorksTest() {
@@ -190,6 +193,8 @@ class AuthServiceTest {
 		request.setProfilePicture("./mypfp");
 		request.setRole(Role.USER);
 		
+		int i = 0;
+		when(sequenceService.generateSequence(anyString())).thenReturn(++i);
 		when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 		assertThat(authService.createUser(request)).isTrue();
 	}
@@ -220,6 +225,8 @@ class AuthServiceTest {
 		apiUser.setEmail(email);
 		apiUser.setPassword(passwordEncoder.encode(password));
 		
+		int i = 0;
+		when(sequenceService.generateSequence(anyString())).thenReturn(++i);
 		when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(apiUser));
 		
 		// confirm password != password

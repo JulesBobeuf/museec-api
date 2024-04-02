@@ -89,7 +89,6 @@ public class ImageGenerationService {
 			result = new FileInputStream(savePfp);
 		} catch (FileNotFoundException e) {
 			// should not happen but who knows
-			return null;
 		}
 		return result;
 	}
