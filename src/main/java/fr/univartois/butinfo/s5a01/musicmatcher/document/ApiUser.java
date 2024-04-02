@@ -91,7 +91,7 @@ public class ApiUser implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return role.getAuthorities();
 	}
-	
+
 	@Override
 	public String getPassword() {
 		return password;

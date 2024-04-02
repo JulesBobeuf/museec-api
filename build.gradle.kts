@@ -1,7 +1,12 @@
+configurations {
+    create("dev")
+    create("prod")
+}
+
 plugins {
 	java
-	war
 	jacoco
+	war
 	id("org.springframework.boot") version "3.2.2"
 	id("io.spring.dependency-management") version "1.1.4"
 	id("org.sonarqube") version "4.3.1.3277"
@@ -48,11 +53,32 @@ springBoot {
     mainClass.set( "fr.univartois.butinfo.s5a01.musicmatcher.MusicMatcherApplication")
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
+tasks.register<Copy>("copyProperties") {
+    from("src/main/resources/${project.findProperty("env") ?: "dev"}")
+    into("build/resources/main")
 }
 
-sonar {
+tasks.named("bootJar") {
+    dependsOn("copyProperties")
+}
+
+tasks.named("war") {
+    dependsOn("copyProperties")
+}
+
+tasks.getByName("compileTestJava") {
+    dependsOn(":copyProperties")
+}
+
+tasks.named("resolveMainClassName") {
+    dependsOn("copyProperties")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+sonarqube {
     properties {
         property("sonar.projectKey", "sae5")
         property("sonar.host.url", "https://sonarqube.univ-artois.fr")
@@ -65,9 +91,8 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
-        reports {
+    reports {
         xml.required = true
         csv.required = true
     }
 }
-

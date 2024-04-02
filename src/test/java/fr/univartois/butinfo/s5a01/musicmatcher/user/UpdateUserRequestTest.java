@@ -19,7 +19,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
 
 @SpringBootTest
-public class UpdateUserRequestTest {
+class UpdateUserRequestTest {
 	
 	@Test
 	void attributeTest() {

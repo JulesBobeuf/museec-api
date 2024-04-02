@@ -1,35 +1,19 @@
-package fr.univartois.butinfo.s5a01.musicmatcher.document;
+package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
-import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
-import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
-import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 
-@Document
-@Builder
-public class Offer {
+public class OfferDto {
 
-	/**
-	 * Name of the sequence in the database.
-	 */
-	public static final String SEQUENCE_NAME = "offersequence";
-	
-	@Id
 	private int id;
 	@NotNull
 	@Size(min = 2,max = 30)
@@ -38,11 +22,11 @@ public class Offer {
 	@Size(min = 2,max = 1000)
 	private String description;
 	@NotNull
-	private Set<MusicStyle> musicStyles;
+	private Set<String> musicStyles;
 	@NotNull
-	private Set<Instrument> instruments;
+	private Set<String> instruments;
 	@NotNull
-	private Set<Skill> skills;
+	private Set<String> skills;
 	@NotNull
 	private Country country;
 	@NotNull
@@ -69,8 +53,8 @@ public class Offer {
 	private LocalDateTime dateUpdate;
 	@NotNull
 	private boolean isActive;
-	
-	public Offer() {
+
+	public OfferDto() {
 		// Should be empty : default constructor
 	}
 	public int getId() {
@@ -91,22 +75,22 @@ public class Offer {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Set<MusicStyle> getMusicStyles() {
+	public Set<String> getMusicStyles() {
 		return musicStyles;
 	}
-	public void setMusicStyles(Set<MusicStyle> musicStyles) {
+	public void setMusicStyles(Set<String> musicStyles) {
 		this.musicStyles = musicStyles;
 	}
-	public Set<Instrument> getInstruments() {
+	public Set<String> getInstruments() {
 		return instruments;
 	}
-	public void setInstruments(Set<Instrument> instruments) {
+	public void setInstruments(Set<String> instruments) {
 		this.instruments = instruments;
 	}
-	public Set<Skill> getSkills() {
+	public Set<String> getSkills() {
 		return skills;
 	}
-	public void setSkills(Set<Skill> skills) {
+	public void setSkills(Set<String> skills) {
 		this.skills = skills;
 	}
 	public int getAgeMin() {
@@ -157,18 +141,6 @@ public class Offer {
 	public void setDateUpdate(LocalDateTime dateUpdate) {
 		this.dateUpdate = dateUpdate;
 	}
-	
-	// method which allows to add Awaiting members
-	public Set<Integer> addAwaitingMembers(int idAwaitingMember) {
-		this.awaitingMembers.add(idAwaitingMember);
-		return awaitingMembers;
-	}
-	
-	// method which allows to add users in the rejected list
-	public Set<Integer> addUsersThatRejected(int idUsersThatRejected) {
-		this.usersThatRejected.add(idUsersThatRejected);
-		return usersThatRejected;
-	}
 	public boolean isActive() {
 		return isActive;
 	}
@@ -181,5 +153,5 @@ public class Offer {
 	public void setCountry(Country country) {
 		this.country = country;
 	}
-	
+
 }

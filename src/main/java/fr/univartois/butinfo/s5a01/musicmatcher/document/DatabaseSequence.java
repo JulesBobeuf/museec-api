@@ -12,7 +12,7 @@ public class DatabaseSequence {
     private long seq;
     
     public DatabaseSequence() {
-    	
+		// Should be empty : default constructor
     }
 
 	public String getId() {

@@ -46,7 +46,7 @@ public class UpdateUserRequest {
 	private int idBand;
 	
 	public UpdateUserRequest() {
-		
+		// Should be empty : default constructor
 	}
 	
 	public String getFirstName() {
