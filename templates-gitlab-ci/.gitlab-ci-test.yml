@@ -1,6 +1,6 @@
 unit_tests:
   stage: test
-  dependencies:
+  needs:
     - build_application
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
@@ -14,10 +14,10 @@ unit_tests:
 
 sonarqube:
   stage: test
-  dependencies:
+  needs:
     - unit_tests
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
+  #rules:
+  #  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
   tags:
     - docker2
   allow_failure: false
