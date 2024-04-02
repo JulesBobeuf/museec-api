@@ -3,6 +3,7 @@ package fr.univartois.butinfo.s5a01.musicmatcher.band;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -148,6 +149,9 @@ class BandServiceTest {
 		when(userRepository.findById(1)).thenReturn(Optional.of(user));
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 		when(userRepository.findByEmail(email2)).thenReturn(Optional.of(user2));
+		
+		when(bandRepository.save(any())).thenReturn(null);
+		when(userRepository.save(any())).thenReturn(null);
 		
 		assertThat(bandService.createBand(band, email)).isTrue();
 		assertThat(bandService.createBand(band, email2)).isTrue();
