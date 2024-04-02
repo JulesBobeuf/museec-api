@@ -7,7 +7,7 @@ unit_tests:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME!="main"'  
   tags:
     - docker2
-  allow_failure: true # Database doesn't exist
+  allow_failure: false
   script:
     - $GRADLE_CMD -Penv=qual clean
     - $GRADLE_CMD -Penv=qual test
@@ -20,7 +20,7 @@ unit_tests_prod:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME=="main"'
   tags:
     - docker2
-  allow_failure: true # Database doesn't exist
+  allow_failure: false
   script:
     - $GRADLE_CMD -Penv=prod clean
     - $GRADLE_CMD -Penv=prod test
@@ -29,8 +29,8 @@ sonarqube:
   stage: test
   needs:
     - unit_tests
-  #rules:
-  #  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
   tags:
     - docker2
   allow_failure: false
