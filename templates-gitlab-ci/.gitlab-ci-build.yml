@@ -8,7 +8,6 @@ build_application:
     - docker2
   allow_failure: false
   script:
-    - echo "$GRADLE_CMD"
     - $GRADLE_CMD clean build --refresh-dependencies --debug
     - $GRADLE_CMD bootJar
   artifacts:
