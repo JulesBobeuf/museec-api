@@ -21,11 +21,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
+import fr.univartois.butinfo.s5a01.musicmatcher.document.DatabaseSequence;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.BandDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateBandDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.BandService;
+import fr.univartois.butinfo.s5a01.musicmatcher.service.SequenceGeneratorService;
 
 @SpringBootTest
 class BandServiceTest {
@@ -38,6 +40,9 @@ class BandServiceTest {
 	
 	@MockBean
 	private UserRepository userRepository;
+	
+	@MockBean
+	private SequenceGeneratorService sequenceService;
 	
 	@Test
 	void testGetBand() {
@@ -150,8 +155,8 @@ class BandServiceTest {
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 		when(userRepository.findByEmail(email2)).thenReturn(Optional.of(user2));
 		
-		when(bandRepository.save(any())).thenReturn(null);
-		when(userRepository.save(any())).thenReturn(null);
+		int i = 0;
+		when(sequenceService.generateSequence(anyString())).thenReturn(++i);
 		
 		assertThat(bandService.createBand(band, email)).isTrue();
 		assertThat(bandService.createBand(band, email2)).isTrue();
