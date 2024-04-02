@@ -1,6 +1,6 @@
 FROM gradle:8.5.0-jdk17
 
-MAINTAINER "Jules BOBEUF"
+LABEL MAINTAINER="Jules BOBEUF"
 
 WORKDIR /app
 

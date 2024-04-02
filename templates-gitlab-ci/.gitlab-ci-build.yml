@@ -2,10 +2,22 @@ build_application:
   stage: build
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME!="main"'  
   tags:
     - docker2
   allow_failure: false
   script:
     - $GRADLE_CMD -Penv=qual clean
     - $GRADLE_CMD -Penv=qual assemble --refresh-dependencies
+
+
+build_application_prod:
+  stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME=="main"'
+  tags:
+    - docker2
+  allow_failure: false
+  script:
+    - $GRADLE_CMD -Penv=prod clean
+    - $GRADLE_CMD -Penv=prod assemble --refresh-dependencies
