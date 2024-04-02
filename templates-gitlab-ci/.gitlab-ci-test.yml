@@ -22,6 +22,7 @@ sonarqube:
     - docker2
   allow_failure: false
   script:
+    - $GRADLE_CMD -Penv=qual clean
     - $GRADLE_CMD jacocoTestReport -Penv=qual
     - $GRADLE_CMD jacocoTestCoverageVerification -Penv=qual
     - $GRADLE_CMD sonar -D sonar.login=$SONARQUBE_TOKEN -Penv=qual
