@@ -1,4 +1,4 @@
-build_application:
+generate_jar:
   stage: deploy
   needs:
     - unit_tests
