@@ -9,11 +9,3 @@ build_application:
   script:
     - $GRADLE_CMD -Penv=qual clean
     - $GRADLE_CMD -Penv=qual assemble --refresh-dependencies
-    - $GRADLE_CMD -Penv=qual bootJar
-  artifacts:
-      name: museec-executables-$CI_COMMIT_SHA
-      expire_in: 10 mins 0 sec
-      paths:
-         - build/libs/
-  
-  

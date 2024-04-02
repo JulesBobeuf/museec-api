@@ -1,7 +1,6 @@
 stages:
     - build
     - test
-    - javadoc
     - deploy
 
 image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/gradle:8.5.0-jdk17"
@@ -14,7 +13,7 @@ include:
     - '/templates-gitlab-ci/.gitlab-ci-build.yml'
   # test
     - '/templates-gitlab-ci/.gitlab-ci-test.yml'
-  # prod (if merge to main)
-    #- '/templates-gitlab-ci/.gitlab-ci-prod.yml'
+  # deploy
+    - '/templates-gitlab-ci/.gitlab-ci-deploy.yml'
 
 
