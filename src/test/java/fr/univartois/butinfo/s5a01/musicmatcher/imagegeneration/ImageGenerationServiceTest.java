@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -122,8 +123,8 @@ class ImageGenerationServiceTest {
 		Map<String, String> requestBody = new HashMap<>();
 		requestBody.put("id", String.valueOf(userid));
 		
-		Map<String, String[]> response = new HashMap<>();
-		response.put("file_list", new String[]{"file1.png", "file2.png"});
+		Map<String, List<String>> response = new HashMap<>();
+		response.put("file_list", List.of("file1.png", "file2.png"));
 		
 		URI uri = null;
 		try {
@@ -143,7 +144,7 @@ class ImageGenerationServiceTest {
             
             @Override
             public void execute() throws Throwable {
-        		imageGenerationService.getImagesPath(userid);
+        		imageGenerationService.getImagesPath(1);
         	}
         });
 

@@ -200,7 +200,7 @@ class BandServiceTest {
             
             @Override
             public void execute() throws Throwable {
-            	assertThat(bandService.updateBand(1, bandDto, email)).withFailMessage("Forbidden");
+            	assertThat(bandService.updateBand(1, bandDto, email));
             }
         });
         
@@ -247,7 +247,7 @@ class BandServiceTest {
             
             @Override
             public void execute() throws Throwable {
-            	assertThat(bandService.deleteBand(1, email)).withFailMessage("Forbidden");
+            	assertThat(bandService.deleteBand(1, email));
             }
         });
         
