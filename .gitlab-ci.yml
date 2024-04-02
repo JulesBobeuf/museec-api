@@ -1,0 +1,18 @@
+stages:
+    - build
+    - test
+    - deploy
+
+image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/gradle:8.5.0-jdk17"
+
+variables:
+  GRADLE_CMD: gradle -Dhttp.proxyHost=$PROXY_HTTP -Dhttp.proxyPort=$PROXY_PORT -Dhttps.proxyHost=$PROXY_HTTPS -Dhttps.proxyPort=$PROXY_PORT
+include:
+  # build
+    - '/templates-gitlab-ci/.gitlab-ci-build.yml'
+  # test
+    - '/templates-gitlab-ci/.gitlab-ci-test.yml'
+  # deploy
+    - '/templates-gitlab-ci/.gitlab-ci-deploy.yml'
+
+

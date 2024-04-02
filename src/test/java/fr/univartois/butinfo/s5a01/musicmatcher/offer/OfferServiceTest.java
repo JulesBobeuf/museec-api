@@ -3,6 +3,7 @@ package fr.univartois.butinfo.s5a01.musicmatcher.offer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.OfferRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.OfferService;
+import fr.univartois.butinfo.s5a01.musicmatcher.service.SequenceGeneratorService;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
@@ -36,17 +38,20 @@ import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
 @SpringBootTest
 class OfferServiceTest {
 
-	@MockBean
-	private UserRepository userRepository;
-	
 	@Autowired
 	private OfferService offerService;
+	
+	@MockBean
+	private UserRepository userRepository;
 	
 	@MockBean
 	private OfferRepository offerRepository;
 	
 	@MockBean
 	private BandRepository bandRepository;
+	
+	@MockBean
+	private SequenceGeneratorService sequenceService;
 
 	@Test
 	void acceptOfferTest() {
@@ -249,6 +254,8 @@ class OfferServiceTest {
 		
 		assertThat(offerService.createOffer(offer, email)).isFalse();
 		
+		int i = 0;
+		when(sequenceService.generateSequence(anyString())).thenReturn(++i);
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 		when(userRepository.findByEmail(email2)).thenReturn(Optional.of(user2));
 		when(userRepository.findById(1)).thenReturn(Optional.of(user));
