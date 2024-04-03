@@ -1,6 +1,5 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.controller;
 
-import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +10,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationData;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.ImageGenerationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +39,7 @@ public class ImageGenerationController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PostMapping("/genimgfromprompt")
 	@ResponseBody
-	public ResponseEntity<InputStreamResource> generateImageFromPrompt(@RequestBody ImageGenerationData request) {
+	public ResponseEntity<InputStreamResource> generateImageFromPrompt(@RequestBody ImageGenerationRequest request) {
         InputStreamResource resource = new InputStreamResource(imageGenerationService.generateImageFromPrompt(request));
 		return ResponseEntity.ok()
 				.contentType(MediaType.IMAGE_PNG)
@@ -83,4 +83,18 @@ public class ImageGenerationController {
     	return ResponseEntity.ok("The image could not be deleted.");
 	}
 
+	@Operation(summary = "updateProfilePictureService", description = "Update the profile pictire of the user", tags = { "ImageGeneration" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PutMapping("/profilepicture")
+	@ResponseBody
+	public ResponseEntity<String> updateProfilePictureService(@RequestBody RetrieveDeleteGeneratedImageDto request) {
+        boolean res = imageGenerationService.updateProfilePictureService(request);
+        if (res) {
+        	return ResponseEntity.ok("The image was updated successfully");
+        }
+    	return ResponseEntity.ok("The image could not be updated");
+	}
+	
 }
