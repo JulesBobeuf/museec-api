@@ -2,7 +2,7 @@ package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.ImageStyle;
 
-public class ImageGenerationData {
+public class ImageGenerationRequest {
 	
 	private int id;
 	

@@ -33,7 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationData;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.ImageGenerationService;
@@ -65,7 +65,7 @@ class ImageGenerationServiceTest {
 		
 		int userid = 0;
 		
-		ImageGenerationData request = new ImageGenerationData();
+		ImageGenerationRequest request = new ImageGenerationRequest();
 		request.setId(userid);
 		request.setPrompt("hey this is a test prompt");
 		request.setStyle(ImageStyle.COLOR_SPLASH);

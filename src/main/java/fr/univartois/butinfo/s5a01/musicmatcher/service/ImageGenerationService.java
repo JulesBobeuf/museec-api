@@ -26,8 +26,9 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.RestTemplate;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationData;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.UpdateProfilePictureRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 
 @Service
@@ -50,7 +51,7 @@ public class ImageGenerationService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public InputStream generateImageFromPrompt(ImageGenerationData request) {
+	public InputStream generateImageFromPrompt(ImageGenerationRequest request) {
 
 		Optional<ApiUser> optionalUser = userRepository.findById(request.getId());
 		if (optionalUser.isEmpty()) {
@@ -134,6 +135,32 @@ public class ImageGenerationService {
 		byte[] responseBody = responseEntity.getBody();
 		
 		return new ByteArrayInputStream(responseBody);
+	}
+	
+	public boolean updateProfilePictureService(RetrieveDeleteGeneratedImageDto request) {
+
+		Optional<ApiUser> optionalUser = userRepository.findById(request.getId());
+		if (optionalUser.isEmpty()) {
+			throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
+		}
+
+		ApiUser user = optionalUser.get();
+		
+		InputStream retrieveGeneratedImage = retrieveGeneratedImage(request);
+
+		String filepath = String.format("%s%d%s", pfpPath, request.getId(), pfpext);
+		File savePfp = new File(filepath);
+		
+		try {
+			FileCopyUtils.copy(retrieveGeneratedImage, new FileOutputStream(savePfp));
+		} catch (Exception e) {
+			return false;
+		}
+
+		user.setProfilePicture(filepath);
+		userRepository.save(user);
+		
+		return true;
 	}
 	
 	public boolean deleteGeneratedImage(RetrieveDeleteGeneratedImageDto request) {
