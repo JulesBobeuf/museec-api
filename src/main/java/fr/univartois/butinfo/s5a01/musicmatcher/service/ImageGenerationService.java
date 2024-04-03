@@ -81,7 +81,7 @@ public class ImageGenerationService {
 		Map<String, String> requestBody = new HashMap<>();
 		requestBody.put("id", String.valueOf(request.getId()));
 		requestBody.put("prompt", request.getPrompt());
-		requestBody.put("path", request.getPath());
+		requestBody.put("image_path", request.getPath());
 
 		URI uri = null;
 		try {
