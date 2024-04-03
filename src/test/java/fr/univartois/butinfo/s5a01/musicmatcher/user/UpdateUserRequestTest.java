@@ -40,7 +40,6 @@ class UpdateUserRequestTest {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setGender(gender);
-		user.setIdBand(idBand);
 		
 		user.setInstruments(instruments);
 		user.setMusicStyles(musicStyles);
@@ -60,7 +59,6 @@ class UpdateUserRequestTest {
 		assertTrue(user.getMusicStyles().containsAll(musicStyles));
 		assertTrue(user.getSkills().containsAll(skills));
 		
-		assertThat(idBand).isEqualTo(user.getIdBand());
 		assertFalse(user.isLookingForAGroup());
 	}
 

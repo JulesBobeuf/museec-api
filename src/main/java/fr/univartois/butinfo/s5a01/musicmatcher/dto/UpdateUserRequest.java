@@ -2,7 +2,6 @@ package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
 import java.util.Set;
 
-
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
@@ -42,8 +41,6 @@ public class UpdateUserRequest {
 	private Set<MusicStyle> musicStyles;
 	@NotNull
 	private Country country;
-	@NotNull
-	private int idBand;
 	
 	public UpdateUserRequest() {
 		// Should be empty : default constructor
@@ -115,14 +112,5 @@ public class UpdateUserRequest {
 	public void setCountry(Country country) {
 		this.country = country;
 	}
-
-	public int getIdBand() {
-		return idBand;
-	}
-
-	public void setIdBand(int idBand) {
-		this.idBand = idBand;
-	}
-	
 	
 }

@@ -121,4 +121,18 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_WAS_NOT_FOUND_MESSAGE); 
 	}
 	
+	@Operation(summary = "leaveBand", description = "Band was left", tags = { "User" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@GetMapping("/leave/{id}")
+	@ResponseBody
+	public ResponseEntity<String> leaveBand(@PathVariable int id, Authentication authentication) {
+		boolean result = userService.leaveBand(id, authentication.getName());
+		if (result) {
+			return ResponseEntity.ok("band was left");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or Band was not found");
+	}
+	
 }
