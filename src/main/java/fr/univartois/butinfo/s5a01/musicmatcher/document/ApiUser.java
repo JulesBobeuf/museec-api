@@ -1,6 +1,7 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -278,6 +279,13 @@ public class ApiUser implements UserDetails {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public void addHistory(History history) {
+		if (this.history == null){
+			this.history = new ArrayList<>(); 
+		}
+		this.history.add(history);
 	}
 
 }

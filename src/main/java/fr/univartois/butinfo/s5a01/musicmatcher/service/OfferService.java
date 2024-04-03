@@ -20,6 +20,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.mapper.OfferToOfferDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.OfferRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.History;
 
 @Service
 public class OfferService {
@@ -99,6 +100,12 @@ public class OfferService {
 		}
     	
     	if (realMusician.isLookingForAGroup() && realMusician.getIdBand() == -1 && realOffer.getAwaitingMembers().contains(realMusician.getId())) {
+    		
+    		History history = new History();
+    		history.setJoinDate(LocalDateTime.now());
+    		history.setBandId(realOffer.getIdBand());
+    		realMusician.addHistory(history);
+    		
     		realMusician.setIdBand(realOwner.getIdBand());
     		realMusician.setLookingForAGroup(false);
     		realOffer.setActive(false);
