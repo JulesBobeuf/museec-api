@@ -1,12 +1,10 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
-import fr.univartois.butinfo.s5a01.musicmatcher.utils.ImageStyle;
-
 public class GenerateImageFromImageRequest {
 
 	private int id;
 	
-	private ImageStyle style;
+	private String prompt;
 	
 	private String path;
 	
@@ -14,10 +12,10 @@ public class GenerateImageFromImageRequest {
 		
 	}
 	
-	public GenerateImageFromImageRequest(int id, ImageStyle style, String path) {
+	public GenerateImageFromImageRequest(int id, String prompt, String path) {
 		super();
 		this.id = id;
-		this.style = style;
+		this.prompt = prompt;
 		this.path = path;
 	}
 
@@ -29,12 +27,12 @@ public class GenerateImageFromImageRequest {
 		this.id = id;
 	}
 
-	public ImageStyle getStyle() {
-		return style;
+	public String getPrompt() {
+		return prompt;
 	}
 
-	public void setStyle(ImageStyle style) {
-		this.style = style;
+	public void setPrompt(String prompt) {
+		this.prompt = prompt;
 	}
 
 	public String getPath() {

@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -119,8 +118,8 @@ class ImageGenerationServiceTest {
 		
 		GenerateImageFromImageRequest request = new GenerateImageFromImageRequest();
 		request.setId(userid);
-		request.setPath("hey this is a test prompt");
-		request.setStyle(ImageStyle.COLOR_SPLASH);
+		request.setPath("path");
+		request.setPrompt("a cool prompt");
 		
 		ApiUser apiUser = new ApiUser();
 		apiUser.setId(userid);
@@ -128,7 +127,7 @@ class ImageGenerationServiceTest {
 		
 		Map<String, String> requestBody = new HashMap<>();
 		requestBody.put("id", String.valueOf(request.getId()));
-		requestBody.put("style", request.getStyle().getName());
+		requestBody.put("prompt", request.getPrompt());
 		requestBody.put("path", request.getPath());
 
 		URI uri = null;
