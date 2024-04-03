@@ -1,6 +1,7 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,6 +10,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,12 +24,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
+import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ApiUserDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.UpdateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.UserService;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.History;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
@@ -39,6 +45,9 @@ class UserServiceTest {
 
 	@MockBean
 	private UserRepository userRepository;
+	
+	@MockBean
+	private BandRepository bandRepository;
 
 	@Test
 	void getUserTest() {
@@ -220,4 +229,53 @@ class UserServiceTest {
 		assertThat(userService.deleteUser(1, "toto313@€xample.org")).isTrue();
 
 	}
+	
+	@Test
+	void TestLeaveBand() {
+		String email = "thomas.santoro";
+		String email2 = "jules.bobeuf";
+		String email3 = "admin.admin";
+		
+		ApiUser user = new ApiUser();
+		user.setId(1);
+		user.setEmail(email);
+		user.setAge(18);
+		user.setRole(Role.USER);
+		
+		ApiUser user2 = new ApiUser();
+		user2.setId(2);
+		user2.setEmail(email2);
+		user2.setAge(20);
+		user2.setRole(Role.USER);
+		
+		Band band = new Band();
+		band.setId(1);
+		band.setOwner(1);
+		
+		when(userRepository.findById(1)).thenReturn(Optional.of(user));
+		when(userRepository.findById(2)).thenReturn(Optional.of(user2));
+		
+		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+		when(userRepository.findByEmail(email2)).thenReturn(Optional.of(user2));
+		
+		when(bandRepository.findById(1)).thenReturn(Optional.of(band));
+		
+		assertFalse(userService.leaveBand(4,"oups"));
+		assertFalse(userService.leaveBand(1,email));
+		user.setIdBand(-1);
+		assertFalse(userService.leaveBand(1,email));
+		user.setIdBand(1);
+		band.setOwner(2);
+		ArrayList<History> history = new ArrayList<History>();
+		user.setHistory(history);
+		assertFalse(userService.leaveBand(1,email));
+		History h = new History();
+		h.setBandId(1);
+		h.setJoinDate(LocalDateTime.now());
+		user.addHistory(h);
+		assertFalse(userService.leaveBand(1,email2));
+		assertTrue(userService.leaveBand(1,email));
+		
+	}
+	
 }

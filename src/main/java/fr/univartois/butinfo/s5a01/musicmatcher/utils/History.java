@@ -1,7 +1,7 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.utils;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class History implements Serializable {
 
@@ -12,9 +12,9 @@ public class History implements Serializable {
 
 	private int bandId;
 	
-	private LocalDate joinDate;
+	private LocalDateTime joinDate;
 	
-	private LocalDate leftDate;
+	private LocalDateTime leftDate;
 
 	public int getBandId() {
 		return bandId;
@@ -24,21 +24,20 @@ public class History implements Serializable {
 		this.bandId = bandId;
 	}
 
-	public LocalDate getJoinDate() {
+	public LocalDateTime getJoinDate() {
 		return joinDate;
 	}
 
-	public void setJoinDate(LocalDate joinDate) {
+	public void setJoinDate(LocalDateTime joinDate) {
 		this.joinDate = joinDate;
 	}
 
-	public LocalDate getLeftDate() {
+	public LocalDateTime getLeftDate() {
 		return leftDate;
 	}
 
-	public void setLeftDate(LocalDate leftDate) {
+	public void setLeftDate(LocalDateTime leftDate) {
 		this.leftDate = leftDate;
 	}
-	
 	
 }

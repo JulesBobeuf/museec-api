@@ -66,8 +66,8 @@ public class OfferController {
 	@ApiResponse(responseCode = "404", description = "Owner/Offer/Musician was not found", content = { @Content(schema = @Schema()) })
 	@GetMapping("/acceptMusician")
 	@ResponseBody
-	public ResponseEntity<String> acceptMusician(@RequestParam int idUser, @RequestParam int idOffer) {
-		boolean result = offerService.rejectOffer(idUser,idOffer);
+	public ResponseEntity<String> acceptMusician(Authentication authentication, @RequestParam int idUser, @RequestParam int idOffer) {
+		boolean result = offerService.acceptMusician(authentication.getName(),idOffer,idUser);
 		if (result) {
 			return ResponseEntity.ok("Musician accepted in the band");
 		}
@@ -79,8 +79,8 @@ public class OfferController {
 	@ApiResponse(responseCode = "404", description = "Owner/Offer/Musician was not found", content = { @Content(schema = @Schema()) })
 	@GetMapping("/rejectMusician")
 	@ResponseBody
-	public ResponseEntity<String> rejectMusician(@RequestParam int idUser, @RequestParam int idOffer) {
-		boolean result = offerService.rejectOffer(idUser,idOffer);
+	public ResponseEntity<String> rejectMusician(Authentication authentication, @RequestParam int idUser, @RequestParam int idOffer) {
+		boolean result = offerService.rejectMusician(authentication.getName(),idOffer,idUser);
 		if (result) {
 			return ResponseEntity.ok("Musician rejected of the band");
 		}
@@ -93,7 +93,7 @@ public class OfferController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PostMapping("/createOffer")
 	@ResponseBody
-	public ResponseEntity<String> createOffer(@Valid @RequestBody CreateUpdateOfferDto request,Authentication authentication) {
+	public ResponseEntity<String> createOffer(@Valid @RequestBody CreateUpdateOfferDto request, Authentication authentication) {
 		boolean wasCreated = offerService.createOffer(request,authentication.getName());
 		if (wasCreated) {
 			return ResponseEntity.ok("Offer created successfully");
