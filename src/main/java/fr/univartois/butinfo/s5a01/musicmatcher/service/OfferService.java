@@ -60,6 +60,7 @@ public class OfferService {
      * Method that allows a user to reject an offer
      */
     public Boolean rejectOffer(int idUser, int idOffer) {
+    	
     	Optional<ApiUser> user = userRepository.findById(idUser);
     	Optional<Offer> offer = offerRepository.findById(idOffer);
     	if (user.isEmpty() || offer.isEmpty()) {
