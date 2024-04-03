@@ -2,13 +2,24 @@ package fr.univartois.butinfo.s5a01.musicmatcher.dto;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.ImageStyle;
 
-public class ImageGenerationRequest {
-	
+public class GenerateImageFromImageRequest {
+
 	private int id;
 	
 	private ImageStyle style;
 	
-	private String prompt;
+	private String path;
+	
+	public GenerateImageFromImageRequest() {
+		
+	}
+	
+	public GenerateImageFromImageRequest(int id, ImageStyle style, String path) {
+		super();
+		this.id = id;
+		this.style = style;
+		this.path = path;
+	}
 
 	public int getId() {
 		return id;
@@ -26,12 +37,12 @@ public class ImageGenerationRequest {
 		this.style = style;
 	}
 
-	public String getPrompt() {
-		return prompt;
+	public String getPath() {
+		return path;
 	}
 
-	public void setPrompt(String prompt) {
-		this.prompt = prompt;
+	public void setPath(String path) {
+		this.path = path;
 	}
-
+	
 }

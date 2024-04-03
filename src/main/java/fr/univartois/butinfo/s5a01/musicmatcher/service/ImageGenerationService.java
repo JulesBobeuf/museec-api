@@ -26,9 +26,9 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.RestTemplate;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.GenerateImageFromImageRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.UpdateProfilePictureRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 
 @Service
@@ -51,14 +51,11 @@ public class ImageGenerationService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public InputStream generateImageFromPrompt(ImageGenerationRequest request) {
-
+	public boolean generateImageFromPrompt(ImageGenerationRequest request) {
 		Optional<ApiUser> optionalUser = userRepository.findById(request.getId());
 		if (optionalUser.isEmpty()) {
 			throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
 		}
-
-		ApiUser user = optionalUser.get();
 
 		Map<String, String> requestBody = new HashMap<>();
 		requestBody.put("id", String.valueOf(request.getId()));
@@ -69,29 +66,31 @@ public class ImageGenerationService {
 		try {
 			uri = new URI(String.format("%simage/generate", pythonServerPath));
 		} catch (URISyntaxException e) {
-			return null;
+			return false;
 		}
-		ResponseEntity<byte[]> responseEntity = restTemplate.postForEntity(uri, requestBody, byte[].class);
-		byte[] responseBody = responseEntity.getBody();
-		InputStream inputStream = new ByteArrayInputStream(responseBody);
-
-		String filepath = String.format("%s%d%s", pfpPath, request.getId(), pfpext);
-		File savePfp = new File(filepath);
-		try {
-			FileCopyUtils.copy(inputStream, new FileOutputStream(savePfp));
-		} catch (Exception e) {
-			//empty
+		restTemplate.postForEntity(uri, requestBody, byte[].class);
+		return true;
+	}
+	
+	public boolean generateImageFromImage(GenerateImageFromImageRequest request) {
+		Optional<ApiUser> optionalUser = userRepository.findById(request.getId());
+		if (optionalUser.isEmpty()) {
+			throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
 		}
 
-		user.setProfilePicture(filepath);
-		userRepository.save(user);
-		InputStream result = null;
+		Map<String, String> requestBody = new HashMap<>();
+		requestBody.put("id", String.valueOf(request.getId()));
+		requestBody.put("style", request.getStyle().getName());
+		requestBody.put("path", request.getPath());
+
+		URI uri = null;
 		try {
-			result = new FileInputStream(savePfp);
-		} catch (FileNotFoundException e) {
-			// should not happen but who knows
+			uri = new URI(String.format("%simage/generate", pythonServerPath));
+		} catch (URISyntaxException e) {
+			return false;
 		}
-		return result;
+		restTemplate.postForEntity(uri, requestBody, byte[].class);
+		return true;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -135,6 +134,23 @@ public class ImageGenerationService {
 		byte[] responseBody = responseEntity.getBody();
 		
 		return new ByteArrayInputStream(responseBody);
+	}
+	
+	public InputStream retrieveProfilePictureImage(int id) {
+
+		Optional<ApiUser> optionalUser = userRepository.findById(id);
+		if (optionalUser.isEmpty()) {
+			throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
+		}
+		
+		String filepath = String.format("%s%d%s", pfpPath, id, pfpext);
+		File savePfp = new File(filepath);
+		
+		try {
+			return new FileInputStream(savePfp);
+		} catch (FileNotFoundException e) {
+			return null;
+		}
 	}
 	
 	public boolean updateProfilePictureService(RetrieveDeleteGeneratedImageDto request) {
