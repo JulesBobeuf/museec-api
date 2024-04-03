@@ -55,7 +55,7 @@ public class ImageGenerationController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@PostMapping("/genimgfromimg")
 	@ResponseBody
-	public ResponseEntity<String> generateImageFromPrompt(@RequestBody GenerateImageFromImageRequest request) {
+	public ResponseEntity<String> generateImageFromImage(@RequestBody GenerateImageFromImageRequest request) {
         boolean res = imageGenerationService.generateImageFromImage(request);
         if (res) {
         	return ResponseEntity.ok("The image was generated successfully");
@@ -69,7 +69,7 @@ public class ImageGenerationController {
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@GetMapping("/getimgspath/{id}")
 	@ResponseBody
-	public ResponseEntity<List<String>> generateImageFromPrompt(@PathVariable int id) {
+	public ResponseEntity<List<String>> getImagesPath(@PathVariable int id) {
 		return ResponseEntity.ok(imageGenerationService.getImagesPath(id));
 	}
 	
@@ -77,7 +77,7 @@ public class ImageGenerationController {
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
-	@PostMapping("/retrievepfp/{id}")
+	@GetMapping("/retrievepfp/{id}")
 	@ResponseBody
 	public ResponseEntity<InputStreamResource> retrievePfp(@PathVariable int id) {
 		InputStream pfpInputStream = imageGenerationService.retrieveProfilePictureImage(id);
@@ -117,7 +117,7 @@ public class ImageGenerationController {
     	return ResponseEntity.ok("The image could not be deleted.");
 	}
 
-	@Operation(summary = "updateProfilePictureService", description = "Update the profile pictire of the user", tags = { "ImageGeneration" })
+	@Operation(summary = "updateProfilePictureService", description = "Update the profile picture of the user", tags = { "ImageGeneration" })
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
