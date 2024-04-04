@@ -111,7 +111,11 @@ public class ImageGenerationService {
 		requestBody.put("id", String.valueOf(userid));
 		
 		ResponseEntity<Map> responseEntity = restTemplate.postForEntity(uri, requestBody, Map.class);
-		return (List<String>) responseEntity.getBody().get("file_list");
+		Map<String, List<String>> body = responseEntity.getBody();
+		if (body==null) {
+			return Collections.emptyList();
+		}
+		return body.get("file_list");
 	}
 	
 	public InputStream retrieveGeneratedImage(RetrieveDeleteGeneratedImageDto request) {
