@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -33,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.GenerateImageFromImageRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
@@ -99,17 +99,64 @@ class ImageGenerationServiceTest {
 		
 		when(restTemplate.postForEntity(uri, requestBody, byte[].class)).thenReturn(ResponseEntity.of(Optional.of(bytesFromFile)));
 		
-		InputStream generateImageFromPromptResult = imageGenerationService.generateImageFromPrompt(request);
-		if (generateImageFromPromptResult != null) {
-			// error in gitlab ci
-			assertThat(generateImageFromPromptResult.available()).isEqualTo(new ByteArrayInputStream(bytesFromFile).available());
-		}	
+		assertTrue(imageGenerationService.generateImageFromPrompt(request));
 		assertThrows(IllegalArgumentException.class, new Executable() {
             
             @Override
             public void execute() throws Throwable {
         		request.setId(1);
         		imageGenerationService.generateImageFromPrompt(request);
+        	}
+        });
+
+	}
+	
+	@Test
+	void testGenerateImageFromImage() throws IOException {
+		
+		int userid = 0;
+		
+		GenerateImageFromImageRequest request = new GenerateImageFromImageRequest();
+		request.setId(userid);
+		request.setPath("path");
+		request.setPrompt("a cool prompt");
+		
+		ApiUser apiUser = new ApiUser();
+		apiUser.setId(userid);
+		apiUser.setEmail("toto@example.com");
+		
+		Map<String, String> requestBody = new HashMap<>();
+		requestBody.put("id", String.valueOf(request.getId()));
+		requestBody.put("prompt", request.getPrompt());
+		requestBody.put("path", request.getPath());
+
+		URI uri = null;
+		try {
+			uri = new URI(String.format("%simage/generate", pythonServerPath));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		byte[] bytesFromFile;
+		
+		try (Stream<Path> stream = Files.list(Paths.get(pfpPath))) {
+			bytesFromFile = Files.readAllBytes(stream.findFirst().get());
+	    } catch (IOException e) {
+			e.printStackTrace();
+			bytesFromFile = new byte[2048];
+		}
+		
+		when(userRepository.findById(userid)).thenReturn(Optional.of(apiUser));
+		
+		when(restTemplate.postForEntity(uri, requestBody, byte[].class)).thenReturn(ResponseEntity.of(Optional.of(bytesFromFile)));
+		
+		assertTrue(imageGenerationService.generateImageFromImage(request));
+		assertThrows(IllegalArgumentException.class, new Executable() {
+            
+            @Override
+            public void execute() throws Throwable {
+        		request.setId(1);
+        		imageGenerationService.generateImageFromImage(request);
         	}
         });
 
@@ -149,6 +196,38 @@ class ImageGenerationServiceTest {
             @Override
             public void execute() throws Throwable {
         		imageGenerationService.getImagesPath(1);
+        	}
+        });
+
+	}
+	
+	@Test
+	void retrievePfpTest() throws IOException {
+		
+		int userid = 0;
+		
+		ApiUser apiUser = new ApiUser();
+		apiUser.setId(userid);
+		apiUser.setEmail("toto@example.com");
+		
+		byte[] bytesFromFile;
+		
+		try (Stream<Path> stream = Files.list(Paths.get(pfpPath))) {
+			bytesFromFile = Files.readAllBytes(stream.findFirst().get());
+	    } catch (IOException e) {
+			e.printStackTrace();
+			bytesFromFile = new byte[2048];
+		}
+		
+		when(userRepository.findById(userid)).thenReturn(Optional.of(apiUser));
+		
+		assertThat(imageGenerationService.retrieveProfilePictureImage(userid).available()).isEqualTo(new ByteArrayInputStream(bytesFromFile).available());
+		
+		assertThrows(IllegalArgumentException.class, new Executable() {
+            
+            @Override
+            public void execute() throws Throwable {
+        		imageGenerationService.retrieveProfilePictureImage(913901);
         	}
         });
 

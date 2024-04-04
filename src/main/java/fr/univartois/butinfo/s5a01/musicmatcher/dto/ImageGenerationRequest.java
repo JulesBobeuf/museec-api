@@ -33,7 +33,5 @@ public class ImageGenerationRequest {
 	public void setPrompt(String prompt) {
 		this.prompt = prompt;
 	}
-	
-	
 
 }
