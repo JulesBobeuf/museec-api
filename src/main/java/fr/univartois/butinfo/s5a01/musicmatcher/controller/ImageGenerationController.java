@@ -124,7 +124,7 @@ public class ImageGenerationController {
 	@PutMapping("/profilepicture")
 	@ResponseBody
 	public ResponseEntity<String> updateProfilePictureService(@RequestBody RetrieveDeleteGeneratedImageDto request) {
-        boolean res = imageGenerationService.updateProfilePictureService(request);
+        boolean res = imageGenerationService.updateProfilePicture(request);
         if (res) {
         	return ResponseEntity.ok("The image was updated successfully");
         }

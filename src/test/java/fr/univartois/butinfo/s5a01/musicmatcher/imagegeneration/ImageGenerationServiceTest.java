@@ -202,6 +202,38 @@ class ImageGenerationServiceTest {
 	}
 	
 	@Test
+	void retrievePfpTest() throws IOException {
+		
+		int userid = 0;
+		
+		ApiUser apiUser = new ApiUser();
+		apiUser.setId(userid);
+		apiUser.setEmail("toto@example.com");
+		
+		byte[] bytesFromFile;
+		
+		try (Stream<Path> stream = Files.list(Paths.get(pfpPath))) {
+			bytesFromFile = Files.readAllBytes(stream.findFirst().get());
+	    } catch (IOException e) {
+			e.printStackTrace();
+			bytesFromFile = new byte[2048];
+		}
+		
+		when(userRepository.findById(userid)).thenReturn(Optional.of(apiUser));
+		
+		assertThat(imageGenerationService.retrieveProfilePictureImage(userid).available()).isEqualTo(new ByteArrayInputStream(bytesFromFile).available());
+		
+		assertThrows(IllegalArgumentException.class, new Executable() {
+            
+            @Override
+            public void execute() throws Throwable {
+        		imageGenerationService.retrieveProfilePictureImage(913901);
+        	}
+        });
+
+	}
+	
+	@Test
 	void retrieveGeneratedImageTest() throws IOException {
 		
 		int userid = 0;

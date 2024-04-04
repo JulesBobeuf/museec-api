@@ -153,7 +153,7 @@ public class ImageGenerationService {
 		}
 	}
 	
-	public boolean updateProfilePictureService(RetrieveDeleteGeneratedImageDto request) {
+	public boolean updateProfilePicture(RetrieveDeleteGeneratedImageDto request) {
 
 		Optional<ApiUser> optionalUser = userRepository.findById(request.getId());
 		if (optionalUser.isEmpty()) {
