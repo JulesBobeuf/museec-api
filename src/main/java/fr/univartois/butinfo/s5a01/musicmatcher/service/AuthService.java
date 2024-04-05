@@ -2,6 +2,8 @@ package fr.univartois.butinfo.s5a01.musicmatcher.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.JwtService;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
@@ -115,6 +122,31 @@ public class AuthService implements UserDetailsService {
             return jwtService.generateToken(user);
     	}
     	return errorMsg;
+    }
+    
+    public Map<String, String> loginAndRetriveUser(AuthenticationRequest request) {
+    	Optional<ApiUser> optionalUser = userRepository.findByEmail(request.getEmail());
+    	Map<String, String> result = new HashMap<>();
+    	if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("User doesn't exists");
+    	}
+    	ApiUser user = optionalUser.get();
+    	if (user.isLocked()) {
+            throw new IllegalArgumentException("User is locked");
+    	}
+    	if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+    	    Authentication authentication = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+    	    SecurityContextHolder.getContext().setAuthentication(authentication);
+    	    result.put("jwt", jwtService.generateToken(user));
+    	    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    	    try {
+				result.put("user", ow.writeValueAsString(user));
+			} catch (JsonProcessingException e) {
+				result.put("user", "error when serializing user to Json");
+				e.printStackTrace();
+			}
+    	}
+    	return result;
     }
     
     /**
