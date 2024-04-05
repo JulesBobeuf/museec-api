@@ -1,5 +1,7 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -65,5 +67,15 @@ public class AuthController {
 	    	return ResponseEntity.status(401).body(result);
 	    }
 		return ResponseEntity.ok(result);
+	}
+	
+	@Operation(summary = "login", description = "Log in and retrieve the user!", tags = { "Auth" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PostMapping("/fulllogin")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> loginAndRetrieveUser(@Valid @RequestBody AuthenticationRequest request) {
+		return ResponseEntity.ok(authService.loginAndRetriveUser(request));
 	}
 }

@@ -31,7 +31,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "ImageGeneration", description = "Image generation endpoint")
 @RestController
 @CrossOrigin
-@RequestMapping("/api/recommendation")
+@RequestMapping("/api/image")
 public class ImageGenerationController {
 	
 	@Autowired

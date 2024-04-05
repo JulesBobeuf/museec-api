@@ -7,7 +7,6 @@ import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.MusicStyle;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Skill;
-import io.swagger.v3.oas.models.security.SecurityScheme.In;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -43,7 +42,7 @@ public class CreateUpdateOfferDto {
 	private Gender gender;
 	
 	public CreateUpdateOfferDto() {
-		
+		super();
 	}
 	
 	public String getName() {

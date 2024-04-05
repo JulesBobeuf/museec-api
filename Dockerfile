@@ -7,3 +7,5 @@ WORKDIR /app
 COPY . .
 
 EXPOSE 8080
+
+CMD ["gradle", "bootRun", "-Penv=dev"]

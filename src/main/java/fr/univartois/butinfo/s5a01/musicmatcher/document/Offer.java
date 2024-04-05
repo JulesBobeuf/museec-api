@@ -1,9 +1,7 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.document;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
-
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

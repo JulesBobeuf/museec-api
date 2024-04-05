@@ -12,6 +12,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
@@ -83,9 +86,11 @@ public class ApiUser implements UserDetails {
 	private boolean isLocked;
 	@NotNull
 	@DateTimeFormat
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	private LocalDateTime dateCreation;
 	@NotNull
 	@DateTimeFormat
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	private LocalDateTime dateUpdate;
 
 	@Override

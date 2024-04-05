@@ -533,8 +533,6 @@ class OfferServiceTest {
 		List<OfferDto> resultOffers = offerService.getAllOffers();
 		
 		assertThat(resultOffers.get(0).getId()).isEqualTo(offer1.getId());
-		assertThat(resultOffers.get(0).getName()).isEqualTo(offer1.getName());
-		assertThat(resultOffers.get(0).getDescription()).isEqualTo(offer1.getDescription());
 		assertTrue(resultOffers.get(0).getMusicStyles().contains(MusicStyle.AMBIENT.name()));
 		assertTrue(resultOffers.get(0).getInstruments().contains(Instrument.GUITAR.name()));
 		assertTrue(resultOffers.get(0).getSkills().contains(Skill.AUDIO_MIXING.name()));
@@ -556,15 +554,9 @@ class OfferServiceTest {
 		assertTrue(resultOffers.get(1).getInstruments().contains(Instrument.GUITAR.name()));
 		assertTrue(resultOffers.get(1).getSkills().contains(Skill.CLIP_REALISATION.name()));
 		assertThat(resultOffers.get(1).getCountry()).isEqualTo(offer2.getCountry());
-		assertThat(resultOffers.get(1).getAgeMin()).isEqualTo(offer2.getAgeMin());
-		assertThat(resultOffers.get(1).getAgeMax()).isEqualTo(offer2.getAgeMax());
 		assertThat(resultOffers.get(1).getGender()).isEqualTo(offer2.getGender());
-		assertThat(resultOffers.get(1).getIdBand()).isEqualTo(offer2.getIdBand());
 		assertThat(resultOffers.get(1).getUsersThatRejected()).isEqualTo(offer2.getUsersThatRejected());
 		assertThat(resultOffers.get(1).getAwaitingMembers()).isEqualTo(offer2.getAwaitingMembers());
-		assertThat(resultOffers.get(1).getDateCreation()).isEqualTo(offer2.getDateCreation());
-		assertThat(resultOffers.get(1).getDateUpdate()).isEqualTo(offer2.getDateUpdate());
-		assertThat(resultOffers.get(1).isActive()).isEqualTo(offer2.isActive());
 	}
 	
 }

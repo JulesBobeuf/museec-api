@@ -30,6 +30,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.dto.GenerateImageFromImageReques
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.ConvertUtils;
 
 @Service
 public class ImageGenerationService {
@@ -93,7 +94,6 @@ public class ImageGenerationService {
 		return true;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<String> getImagesPath(int userid) {
 		Optional<ApiUser> optionalUser = userRepository.findById(userid);
 		if (optionalUser.isEmpty()) {
@@ -110,7 +110,7 @@ public class ImageGenerationService {
 		Map<String, String> requestBody = new HashMap<>();
 		requestBody.put("id", String.valueOf(userid));
 		
-		ResponseEntity<Map> responseEntity = restTemplate.postForEntity(uri, requestBody, Map.class);
+		ResponseEntity<Map<String, List<String>>> responseEntity = ConvertUtils.toT(restTemplate.postForEntity(uri, requestBody, Map.class));
 		Map<String, List<String>> body = responseEntity.getBody();
 		if (body==null) {
 			return Collections.emptyList();
