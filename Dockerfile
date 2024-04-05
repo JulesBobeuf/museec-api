@@ -8,4 +8,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["gradle", "bootRun"]
+CMD ["gradle", "bootRun", "-Penv=dev"]

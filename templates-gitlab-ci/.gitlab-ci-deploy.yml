@@ -37,3 +37,23 @@ generate_jar_prod:
       expire_in: 10 mins 0 sec
       paths:
          - build/libs/
+         
+
+
+upload_image_dockerhub:
+  stage: deploy
+  tags:
+    - nomad
+#  rules:
+#    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME=="main"'
+  image:
+    name: gcr.io/kaniko-project/executor:v1.18.0-debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${URL_REGISTRE_IMAGE}\":{\"auth\":\"$(printf "%s:%s" "${NEXUS_USER}" "${NEXUS_PASSWD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${URL_REGISTRE_IMAGE}/${SPRING_IMAGE}"
