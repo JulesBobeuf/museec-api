@@ -18,6 +18,7 @@ import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.OfferDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.OfferToOfferDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.OfferRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.utils.ConvertUtils;
 
 @Service
 public class RecommendationService {
@@ -42,11 +43,14 @@ public class RecommendationService {
 		} catch(URISyntaxException e) {
 			return Collections.emptyList();
 		}
-		
-		ResponseEntity<Map> responseEntity = restTemplate.postForEntity(uri, requestBody, Map.class);
+		ResponseEntity<Map<String, List<String>>> responseEntity = ConvertUtils.toT(restTemplate.postForEntity(uri, requestBody, Map.class));
 		Map<String, List<String>> body = responseEntity.getBody();
-		List<Offer> findByIdIn = offerRepository.findByIdIn(body.get("recommendation_list").stream().map(Integer::valueOf).collect(Collectors.toList()));
-		System.out.println(findByIdIn);
+		List<Integer> listOfferId = body.get("recommendation_list")
+				.stream()
+				.map(Integer::valueOf)
+				.collect(Collectors.toList());
+		
+		List<Offer> findByIdIn = offerRepository.findByIdIn(listOfferId);
 		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(findByIdIn);
 	}
 	
