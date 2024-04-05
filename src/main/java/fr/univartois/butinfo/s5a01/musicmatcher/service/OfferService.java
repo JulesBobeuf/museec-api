@@ -1,18 +1,25 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.service;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateOfferDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.OfferDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.BandToBandDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateOfferDtoToOfferMapper;
@@ -28,6 +35,9 @@ public class OfferService {
 	private static final String FORBIDDEN_MESSAGE = "Forbidden";
 
 	@Autowired
+	private RestTemplate restTemplate;
+	
+	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
@@ -38,6 +48,16 @@ public class OfferService {
 	
 	@Autowired
 	private SequenceGeneratorService sequenceService;
+	
+	@Value("${python-server-path}")
+	private String pythonServerPath;
+
+	@Value("${save-pfp-path}")
+	private String pfpPath;
+
+	@Value("${pfp-extension}")
+	private String pfpext;
+	
     /**
      * Method that allows a user to accept an offer
      */

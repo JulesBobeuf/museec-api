@@ -6,12 +6,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.OfferDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.OfferToOfferDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.OfferRepository;
@@ -40,9 +43,12 @@ public class RecommendationService {
 			return Collections.emptyList();
 		}
 		
-		@SuppressWarnings("unchecked")
-		List<Integer> result = restTemplate.postForObject(uri, requestBody, List.class);
-		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(offerRepository.findByIdIn(result));
+		ResponseEntity<Map> responseEntity = restTemplate.postForEntity(uri, requestBody, Map.class);
+		Map<String, List<String>> body = responseEntity.getBody();
+		List<Offer> findByIdIn = offerRepository.findByIdIn(body.get("recommendation_list").stream().map(Integer::valueOf).collect(Collectors.toList()));
+		System.out.println(findByIdIn);
+		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(findByIdIn);
 	}
+	
 }
 
