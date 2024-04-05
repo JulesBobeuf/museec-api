@@ -14,7 +14,6 @@ import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Offer;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateOfferDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.OfferDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.mapper.BandToBandDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUpdateOfferDtoToOfferMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.OfferToOfferDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
@@ -183,7 +182,7 @@ public class OfferService {
 		offer.setDateUpdate(dateNow);
 		offer.setActive(true);
 		offer.setAwaitingMembers(new HashSet<>());
-		offer.setUsersThatRejected(new HashSet<>());;
+		offer.setUsersThatRejected(new HashSet<>());
 		offerRepository.save(offer);
     	return true;
     }
@@ -210,7 +209,7 @@ public class OfferService {
     	Band realBand = band.get();
     	
     	if (realBand.getOwner() != owner.getId() && owner.getRole() != Role.ADMINISTRATOR) {
-    		throw new IllegalArgumentException("Forbidden");
+    		throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
 		}
     	
     	offer.setName(request.getName());
@@ -249,7 +248,7 @@ public class OfferService {
     	Band realBand = band.get();
 		// if the user is trying to delete a band that is not his, make sure it's an administrator.
 		if (realBand.getOwner() != owner.getId() &&  (owner.getRole() != Role.ADMINISTRATOR)) {
-	            throw new IllegalArgumentException("Forbidden");
+    		throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
 			
 		}
 		offerRepository.delete(offer);
