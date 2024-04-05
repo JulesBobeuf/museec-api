@@ -119,15 +119,12 @@ public class UserService {
 	public boolean leaveBand(int idUser,String email) {
 		Optional<ApiUser> optionalUser = userRepository.findById(idUser);
 		Optional<ApiUser> optionalAdminOrUser = userRepository.findByEmail(email);
-		System.out.println(Role.ADMINISTRATOR);
 		if (optionalUser.isEmpty() || optionalAdminOrUser.isEmpty()) {
 			return false;
 		}
 
 		ApiUser user = optionalUser.get();
 		ApiUser adminOrUser = optionalAdminOrUser.get();
-		System.out.println(adminOrUser.getRole());
-		System.out.println(Role.ADMINISTRATOR);
 		if ( adminOrUser.getId() != user.getId() && adminOrUser.getRole() != Role.ADMINISTRATOR) {
 			return false;
 		}
