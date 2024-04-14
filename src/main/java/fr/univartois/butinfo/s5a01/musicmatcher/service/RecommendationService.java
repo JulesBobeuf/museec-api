@@ -44,5 +44,23 @@ public class RecommendationService {
 		List<Integer> result = restTemplate.postForObject(uri, requestBody, List.class);
 		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(offerRepository.findByIdIn(result));
 	}
+
+	
+	public List<OfferDto> factoMatricielRecommendation(int userid) {
+		Map<String, Integer> requestBody = new HashMap<>();
+		requestBody.put("id", userid);
+		
+		URI uri = null;
+		try {
+			uri = new URI(String.format("%srecommendation/matrix", pythonServerPath));
+		} catch(URISyntaxException e) {
+			return Collections.emptyList();
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Integer> result = restTemplate.postForObject(uri, requestBody, List.class);
+		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(offerRepository.findByIdIn(result));
+	}
+
 }
 
