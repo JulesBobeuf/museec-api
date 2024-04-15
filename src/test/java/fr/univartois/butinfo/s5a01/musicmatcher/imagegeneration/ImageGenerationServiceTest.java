@@ -283,6 +283,56 @@ class ImageGenerationServiceTest {
 
 	}
 	
+	@Test
+	void updatePfpTest() throws IOException {
+		
+		int userid = 0;
+		
+		ApiUser apiUser = new ApiUser();
+		apiUser.setId(userid);
+		apiUser.setEmail("toto@example.com");
+		
+		RetrieveDeleteGeneratedImageDto request = new RetrieveDeleteGeneratedImageDto();
+		request.setId(userid);
+		request.setPath("mypath");
+		
+		Map<String, String> requestBody = new HashMap<>();
+		requestBody.put("path", request.getPath());
+		
+		URI uri = null;
+		try {
+			uri = new URI(String.format("%simage/by-path", pythonServerPath));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		
+		byte[] bytesFromFile;
+		
+		try (Stream<Path> stream = Files.list(Paths.get(pfpPath))) {
+			bytesFromFile = Files.readAllBytes(stream.findFirst().get());
+	    } catch (IOException e) {
+			e.printStackTrace();
+			bytesFromFile = new byte[2048];
+		}
+		
+		when(userRepository.findById(userid)).thenReturn(Optional.of(apiUser));
+		
+		when(restTemplate.postForEntity(uri, requestBody, byte[].class)).thenReturn(ResponseEntity.of(Optional.of(bytesFromFile)));
+		
+		assertTrue(imageGenerationService.updateProfilePicture(request));
+		
+		assertThrows(IllegalArgumentException.class, new Executable() {
+            
+            @Override
+            public void execute() throws Throwable {
+            	request.setId(-9);
+        		imageGenerationService.updateProfilePicture(request);
+        	}
+        });
+
+	}
+	
 
 	@Test
 	void deleteImageTest() throws IOException {

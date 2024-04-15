@@ -45,7 +45,7 @@ public class RecommendationController {
 	@GetMapping("/matrix/{id}")
 	@ResponseBody
 	public ResponseEntity<List<OfferDto>> getOffersWithMatrixRecomendation(@PathVariable int id) {
-		return ResponseEntity.ok(recommendationService.factoMatrixRecommendation(id));
+		return ResponseEntity.ok(recommendationService.matrixRecommendation(id));
 	}
 	
 	
