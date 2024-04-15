@@ -54,5 +54,26 @@ public class RecommendationService {
 		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(findByIdIn);
 	}
 	
+	public List<OfferDto> factoMatrixRecommendation(int userid) {
+		Map<String, Integer> requestBody = new HashMap<>();
+		requestBody.put("id", userid);
+		
+		URI uri = null;
+		try {
+			uri = new URI(String.format("%srecommendation/matrix", pythonServerPath));
+		} catch(URISyntaxException e) {
+			return Collections.emptyList();
+		}
+		ResponseEntity<Map<String, List<String>>> responseEntity = ConvertUtils.toT(restTemplate.postForEntity(uri, requestBody, Map.class));
+		Map<String, List<String>> body = responseEntity.getBody();
+		List<Integer> listOfferId = body.get("recommendation_list")
+				.stream()
+				.map(Integer::valueOf)
+				.collect(Collectors.toList());
+		
+		List<Offer> findByIdIn = offerRepository.findByIdIn(listOfferId);
+		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(findByIdIn);
+	}
+
 }
 
