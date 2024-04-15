@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,16 +44,21 @@ public class RecommendationService {
 		}
 		ResponseEntity<Map<String, List<String>>> responseEntity = ConvertUtils.toT(restTemplate.postForEntity(uri, requestBody, Map.class));
 		Map<String, List<String>> body = responseEntity.getBody();
+		
+		if (body == null) {
+			return Collections.emptyList();
+		}
+		
 		List<Integer> listOfferId = body.get("recommendation_list")
 				.stream()
 				.map(Integer::valueOf)
-				.collect(Collectors.toList());
+				.toList();
 		
 		List<Offer> findByIdIn = offerRepository.findByIdIn(listOfferId);
 		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(findByIdIn);
 	}
 	
-	public List<OfferDto> factoMatrixRecommendation(int userid) {
+	public List<OfferDto> matrixRecommendation(int userid) {
 		Map<String, Integer> requestBody = new HashMap<>();
 		requestBody.put("id", userid);
 		
@@ -66,10 +70,15 @@ public class RecommendationService {
 		}
 		ResponseEntity<Map<String, List<String>>> responseEntity = ConvertUtils.toT(restTemplate.postForEntity(uri, requestBody, Map.class));
 		Map<String, List<String>> body = responseEntity.getBody();
+		
+		if (body == null) {
+			return Collections.emptyList();
+		}
+		
 		List<Integer> listOfferId = body.get("recommendation_list")
 				.stream()
 				.map(Integer::valueOf)
-				.collect(Collectors.toList());
+				.toList();
 		
 		List<Offer> findByIdIn = offerRepository.findByIdIn(listOfferId);
 		return OfferToOfferDtoMapper.INSTANCE.listOfferToListOfferDto(findByIdIn);
