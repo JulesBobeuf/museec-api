@@ -1,7 +1,6 @@
 package fr.univartois.butinfo.s5a01.musicmatcher.recommendation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
