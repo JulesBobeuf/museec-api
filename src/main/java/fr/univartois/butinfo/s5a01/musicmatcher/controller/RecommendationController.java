@@ -38,6 +38,15 @@ public class RecommendationController {
 		return ResponseEntity.ok(recommendationService.jaccardRecommendation(id));
 	}
 	
+	@Operation(summary = "getMatrixRecomendation", description = "Get Matrix Recomendation", tags = { "Recommendation" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@GetMapping("/matrix/{id}")
+	@ResponseBody
+	public ResponseEntity<List<OfferDto>> getOffersWithMatrixRecomendation(@PathVariable int id) {
+		return ResponseEntity.ok(recommendationService.factoMatrixRecommendation(id));
+	}
 	
 	
 }
