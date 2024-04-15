@@ -137,14 +137,8 @@ public class AuthService implements UserDetailsService {
     	if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
     	    Authentication authentication = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
     	    SecurityContextHolder.getContext().setAuthentication(authentication);
-    	    result.put("jwt", jwtService.generateToken(user));
-    	    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    	    try {
-				result.put("user", ow.writeValueAsString(user));
-			} catch (JsonProcessingException e) {
-				result.put("user", "error when serializing user to Json");
-				e.printStackTrace();
-			}
+    	    result.put("jwtToken", jwtService.generateToken(user));
+    	    result.put("userID", String.valueOf(user.getId()));
     	}
     	return result;
     }
