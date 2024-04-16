@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
 @Tag(name = "Offer", description = "Offer endpoint")
 @RestController
 @CrossOrigin
-@RequestMapping("/api/offers")
+@RequestMapping("/api/offer")
 public class OfferController {
 	
 	@Autowired
@@ -93,7 +93,7 @@ public class OfferController {
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
-	@PostMapping("/createOffer")
+	@PostMapping("/")
 	@ResponseBody
 	public ResponseEntity<String> createOffer(@Valid @RequestBody CreateUpdateOfferDto request, Authentication authentication) {
 		boolean wasCreated = offerService.createOffer(request,authentication.getName());
