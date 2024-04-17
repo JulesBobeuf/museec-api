@@ -24,16 +24,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.GenerateImageFromImageRequest;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.GenerateImageFromImageRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.ConvertUtils;
 
 @Service
 public class ImageGenerationService {
+
+	private static final String FILEPATH_FORMAT = "%s%d%s";
 
 	private static final String FORBIDDEN_MESSAGE = "Forbidden";
 
@@ -45,12 +52,18 @@ public class ImageGenerationService {
 
 	@Value("${save-pfp-path}")
 	private String pfpPath;
+	
+	@Value("${save-band-pfp-path}")
+	private String bandPfpPath;
 
 	@Value("${pfp-extension}")
 	private String pfpext;
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private BandRepository bandRepository;
 
 	public boolean generateImageFromPrompt(ImageGenerationRequest request) {
 		Optional<ApiUser> optionalUser = userRepository.findById(request.getId());
@@ -147,7 +160,7 @@ public class ImageGenerationService {
 			throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
 		}
 		
-		String filepath = String.format("%s%d%s", pfpPath, id, pfpext);
+		String filepath = String.format(FILEPATH_FORMAT, pfpPath, id, pfpext);
 		File savePfp = new File(filepath);
 		
 		try {
@@ -168,7 +181,7 @@ public class ImageGenerationService {
 		
 		InputStream retrieveGeneratedImage = retrieveGeneratedImage(request);
 
-		String filepath = String.format("%s%d%s", pfpPath, request.getId(), pfpext);
+		String filepath = String.format(FILEPATH_FORMAT, pfpPath, request.getId(), pfpext);
 		File savePfp = new File(filepath);
 		
 		try {
@@ -204,4 +217,51 @@ public class ImageGenerationService {
 
         return response.getStatusCode().is2xxSuccessful();
     }
+	
+	
+	/**
+	 * Retrieve a band's profile picture
+	 * @param id
+	 * @return
+	 */
+	public InputStream retrieveBandProfilePictureImage(int id) {
+
+		Optional<Band> optionalBand = bandRepository.findById(id);
+		if (optionalBand.isEmpty()) {
+			throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
+		}
+		
+		String filepath = String.format(FILEPATH_FORMAT, bandPfpPath, id, pfpext);
+		File savePfp = new File(filepath);
+		
+		try {
+			return new FileInputStream(savePfp);
+		} catch (FileNotFoundException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Method that saves a band profile picture
+	 * @param request
+	 * @return
+	 */
+	public boolean saveBandProfilePicture(int bandId, MultipartFile image) {
+
+		Optional<Band> optionalBand = bandRepository.findById(bandId);
+		if (optionalBand.isEmpty()) {
+			throw new IllegalArgumentException(FORBIDDEN_MESSAGE);
+		}
+		
+		String filepath = String.format(FILEPATH_FORMAT, bandPfpPath, bandId, pfpext);
+		File savePfp = new File(filepath);
+		
+		try {
+			FileCopyUtils.copy(image.getInputStream(), new FileOutputStream(savePfp));
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
+	}
 }

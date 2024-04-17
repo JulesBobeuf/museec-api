@@ -32,10 +32,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.GenerateImageFromImageRequest;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.GenerateImageFromImageRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.ImageGenerationService;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.ImageStyle;
 

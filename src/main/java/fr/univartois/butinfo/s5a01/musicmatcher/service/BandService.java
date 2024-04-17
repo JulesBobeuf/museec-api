@@ -20,6 +20,8 @@ import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 @Service
 public class BandService {
 
+	private static final String FORBIDDEN = "Forbidden";
+
 	@Autowired
 	private BandRepository bandRepository;
 	
@@ -28,6 +30,7 @@ public class BandService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
 	
 	/**
 	 * Get all bands
@@ -96,7 +99,7 @@ public class BandService {
 		ApiUser user = optionalUser.get();
 		
 		if (band.getOwner() != user.getId() &&  (user.getRole() != Role.ADMINISTRATOR)) {
-	            throw new IllegalArgumentException("Forbidden");
+	            throw new IllegalArgumentException(FORBIDDEN);
 		}
 		
 		// make sure the new owner exists
@@ -132,10 +135,11 @@ public class BandService {
 		
 		// if the user is trying to delete a band that is not his, make sure it's an administrator.
 		if (band.getOwner() != user.getId() &&  (user.getRole() != Role.ADMINISTRATOR)) {
-	            throw new IllegalArgumentException("Forbidden");
+	            throw new IllegalArgumentException(FORBIDDEN);
 			
 		}
 		bandRepository.delete(band);
 		return true;
 	}
+	
 }

@@ -18,11 +18,11 @@ import org.springframework.stereotype.Service;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.JwtService;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.AuthenticationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ChangePasswordDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.CreateUserRequestToApiUserMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.AuthenticationRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.CreateUserRequest;
 
 @Service
 public class AuthService implements UserDetailsService {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,14 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.GenerateImageFromImageRequest;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.GenerateImageFromImageRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.ImageGenerationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -131,6 +136,37 @@ public class ImageGenerationController {
         	return ResponseEntity.ok("The image was updated successfully");
         }
     	return ResponseEntity.ok("The image could not be updated");
+	}
+	
+	@Operation(summary = "getBandProfilePicture", description = "Retrieve a band's profile picture", tags = { "ImageGeneration" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@GetMapping("/retrievebandpfp/{id}")
+	@ResponseBody
+	public ResponseEntity<InputStreamResource> getBandProfilePicture(@PathVariable int id) {
+		InputStream profilePicture = imageGenerationService.retrieveBandProfilePictureImage(id);
+		if (profilePicture != null) {
+			InputStreamResource resource = new InputStreamResource(profilePicture);
+			return ResponseEntity.ok()
+					.contentType(MediaType.IMAGE_PNG)
+					.body(resource);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	}
+	
+	@Operation(summary = "saveBandProfilePicture", description = "Save a band's profile picture", tags = { "ImageGeneration" })
+	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) })
+	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
+	@PostMapping(path="/savebandpfp/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@ResponseBody
+	public ResponseEntity<String> saveBandProfilePicture(@PathVariable int id, @RequestParam(value = "image", required = true) MultipartFile image) {
+		boolean result = imageGenerationService.saveBandProfilePicture(id, image);
+		if (result) {
+			return ResponseEntity.ok("The band profile picture was saved successfully");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The band was not found");
 	}
 	
 }

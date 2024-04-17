@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ApiUserDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.UpdateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.UpdateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
