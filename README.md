@@ -1,4 +1,6 @@
-# Music Matcher API
+# Museec API
+
+Museec is an application that allows users to find/seek musicians for their Bands.
 
 ## Tests
 
@@ -10,7 +12,7 @@ Do not run tests using JUnit5. Standalone JUnit will not find the mapstructs map
 
 To send reports on Sonarqube :
 	
-	gradle sonar -D "sonar.login=f1985977d96e16596dcd11f9aff4237eeb64d032"
+	gradle sonar -D "sonar.login=<token>"
 	
 	
 to build the jar of the application with builds : dev, qual, prod

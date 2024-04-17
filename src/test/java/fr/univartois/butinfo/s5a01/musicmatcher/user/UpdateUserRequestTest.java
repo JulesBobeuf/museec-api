@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.UpdateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.UpdateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Gender;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Instrument;

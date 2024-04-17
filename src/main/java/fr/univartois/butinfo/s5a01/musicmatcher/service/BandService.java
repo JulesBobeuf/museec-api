@@ -20,6 +20,8 @@ import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
 @Service
 public class BandService {
 
+	private static final String FORBIDDEN = "Forbidden";
+
 	@Autowired
 	private BandRepository bandRepository;
 	
@@ -28,6 +30,7 @@ public class BandService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
 	
 	/**
 	 * Get all bands
@@ -57,7 +60,7 @@ public class BandService {
 	 * @param email
 	 * @return wasCreated
 	 */
-	public boolean createBand(CreateUpdateBandDto request, String email) {
+	public int createBand(CreateUpdateBandDto request, String email) {
 		Band band = CreateUpdateBandDtoToBandMapper.INSTANCE.createUpdateBandDtoToBand(request);
 		Optional<ApiUser> optionalOwner = userRepository.findById(band.getOwner());
 		Optional<ApiUser> optionalUser = userRepository.findByEmail(email);
@@ -72,10 +75,10 @@ public class BandService {
 				
 				owner.setIdBand(band.getId());
 				userRepository.save(owner);
-				return true;
+				return band.getId();
 			}
 		}
-		return false;
+		return -1;
 	}
 	
 	/**
@@ -96,7 +99,7 @@ public class BandService {
 		ApiUser user = optionalUser.get();
 		
 		if (band.getOwner() != user.getId() &&  (user.getRole() != Role.ADMINISTRATOR)) {
-	            throw new IllegalArgumentException("Forbidden");
+	            throw new IllegalArgumentException(FORBIDDEN);
 		}
 		
 		// make sure the new owner exists
@@ -132,10 +135,11 @@ public class BandService {
 		
 		// if the user is trying to delete a band that is not his, make sure it's an administrator.
 		if (band.getOwner() != user.getId() &&  (user.getRole() != Role.ADMINISTRATOR)) {
-	            throw new IllegalArgumentException("Forbidden");
+	            throw new IllegalArgumentException(FORBIDDEN);
 			
 		}
 		bandRepository.delete(band);
 		return true;
 	}
+	
 }

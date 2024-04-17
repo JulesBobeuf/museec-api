@@ -29,13 +29,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.client.RestTemplate;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.GenerateImageFromImageRequest;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.ImageGenerationRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.RetrieveDeleteGeneratedImageDto;
+import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.GenerateImageFromImageRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.ImageGenerationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.ImageGenerationService;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.ImageStyle;
 
@@ -47,12 +50,18 @@ class ImageGenerationServiceTest {
 
 	@Value("${save-pfp-path}")
 	private String pfpPath;
+	
+	@Value("${save-band-pfp-path}")
+	private String bandPfpPath;
 
 	@Value("${pfp-extension}")
 	private String pfpext;
 
 	@MockBean
 	private UserRepository userRepository;
+	
+	@MockBean
+	private BandRepository bandRepository;
 	
 	@MockBean
 	private RestTemplate restTemplate;
@@ -370,6 +379,84 @@ class ImageGenerationServiceTest {
             public void execute() throws Throwable {
             	request.setId(-9);
         		imageGenerationService.deleteGeneratedImage(request);
+        	}
+        });
+
+	}
+	
+	@Test
+	void retrieveBandPfpTest() throws IOException {
+		
+		int userid = 0;
+		
+		ApiUser apiUser = new ApiUser();
+		apiUser.setId(userid);
+		apiUser.setEmail("toto@example.com");
+		
+		Band band = new Band();
+		band.setId(0);
+		band.setOwner(0);
+		
+		byte[] bytesFromFile;
+		
+		try (Stream<Path> stream = Files.list(Paths.get(bandPfpPath))) {
+			bytesFromFile = Files.readAllBytes(stream.findFirst().get());
+	    } catch (IOException e) {
+			e.printStackTrace();
+			bytesFromFile = new byte[2048];
+		}
+		
+		when(userRepository.findById(userid)).thenReturn(Optional.of(apiUser));
+
+		when(bandRepository.findById(0)).thenReturn(Optional.of(band));
+
+		assertThat(imageGenerationService.retrieveBandProfilePictureImage(0).available()).isEqualTo(new ByteArrayInputStream(bytesFromFile).available());
+		
+		assertThrows(IllegalArgumentException.class, new Executable() {
+            
+            @Override
+            public void execute() throws Throwable {
+        		imageGenerationService.retrieveProfilePictureImage(913901);
+        	}
+        });
+
+	}
+	
+	@Test
+	void savzBandPfpTest() throws IOException {
+		
+		int userid = 0;
+		
+		ApiUser apiUser = new ApiUser();
+		apiUser.setId(userid);
+		apiUser.setEmail("toto@example.com");
+		
+		Band band = new Band();
+		band.setId(0);
+		band.setOwner(0);
+		
+		byte[] bytesFromFile;
+		
+		try (Stream<Path> stream = Files.list(Paths.get(bandPfpPath))) {
+			bytesFromFile = Files.readAllBytes(stream.findFirst().get());
+	    } catch (IOException e) {
+			e.printStackTrace();
+			bytesFromFile = new byte[2048];
+		}
+		
+		MockMultipartFile mockImage = new MockMultipartFile("file", bytesFromFile);
+		
+		when(userRepository.findById(userid)).thenReturn(Optional.of(apiUser));
+
+		when(bandRepository.findById(0)).thenReturn(Optional.of(band));
+
+		assertThat(imageGenerationService.saveBandProfilePicture(0, mockImage)).isTrue();
+		
+		assertThrows(IllegalArgumentException.class, new Executable() {
+            
+            @Override
+            public void execute() throws Throwable {
+        		imageGenerationService.saveBandProfilePicture(987595, mockImage);
         	}
         });
 

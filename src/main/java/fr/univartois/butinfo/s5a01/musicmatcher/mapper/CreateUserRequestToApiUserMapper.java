@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.CreateUserRequest;
 
 @Mapper
 public interface CreateUserRequestToApiUserMapper {

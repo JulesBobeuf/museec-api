@@ -1,4 +1,4 @@
-package fr.univartois.butinfo.s5a01.musicmatcher.dto;
+package fr.univartois.butinfo.s5a01.musicmatcher.request;
 
 import java.util.Set;
 

@@ -19,10 +19,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.AuthenticationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ChangePasswordDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.AuthenticationRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.CreateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.AuthService;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.SequenceGeneratorService;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.Country;

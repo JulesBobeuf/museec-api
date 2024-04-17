@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.AuthenticationRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ChangePasswordDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUserRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.AuthenticationRequest;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.CreateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

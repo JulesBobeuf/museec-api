@@ -11,10 +11,10 @@ import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.ApiUserDto;
-import fr.univartois.butinfo.s5a01.musicmatcher.dto.UpdateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.mapper.ApiUserToApiUserDtoMapper;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.UserRepository;
+import fr.univartois.butinfo.s5a01.musicmatcher.request.UpdateUserRequest;
 import fr.univartois.butinfo.s5a01.musicmatcher.utils.History;
 
 @Service
