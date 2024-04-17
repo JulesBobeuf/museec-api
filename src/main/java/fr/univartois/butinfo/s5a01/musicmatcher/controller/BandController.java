@@ -42,9 +42,9 @@ public class BandController {
 	@PostMapping("/")
 	@ResponseBody
 	public ResponseEntity<String> createBand(Authentication authentication, @Valid @RequestBody CreateUpdateBandDto request) {
-		boolean wasCreated = bandService.createBand(request, authentication.getName());
-		if (wasCreated) {
-			return ResponseEntity.ok("The band was created successfully");
+		int bandId = bandService.createBand(request, authentication.getName());
+		if (bandId!=-1) {
+			return ResponseEntity.ok(String.valueOf(bandId));
 
 		}
 		return ResponseEntity.badRequest().body("The band could not be created. Bad request");

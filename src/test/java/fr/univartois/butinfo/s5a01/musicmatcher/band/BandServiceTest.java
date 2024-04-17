@@ -3,7 +3,6 @@ package fr.univartois.butinfo.s5a01.musicmatcher.band;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -21,7 +20,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import fr.univartois.butinfo.s5a01.musicmatcher.auth.Role;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.ApiUser;
 import fr.univartois.butinfo.s5a01.musicmatcher.document.Band;
-import fr.univartois.butinfo.s5a01.musicmatcher.document.DatabaseSequence;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.BandDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.dto.CreateUpdateBandDto;
 import fr.univartois.butinfo.s5a01.musicmatcher.repository.BandRepository;
@@ -149,7 +147,7 @@ class BandServiceTest {
 		user2.setIdBand(-1);
 		
 		// repo returns null, so false
-		assertThat(bandService.createBand(band, email)).isFalse();
+		assertThat(bandService.createBand(band, email)).isEqualTo(-1);
 		
 		when(userRepository.findById(1)).thenReturn(Optional.of(user));
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
@@ -158,13 +156,13 @@ class BandServiceTest {
 		int i = 0;
 		when(sequenceService.generateSequence(anyString())).thenReturn(++i);
 		
-		assertThat(bandService.createBand(band, email)).isTrue();
-		assertThat(bandService.createBand(band, email2)).isTrue();
+		assertThat(bandService.createBand(band, email)).isNotEqualTo(-1);
+		assertThat(bandService.createBand(band, email2)).isNotEqualTo(-1);
 		
 		user.setId(4);
 
 		// An admin can create a band for anyone. a User can create a band only for himself
-		assertThat(bandService.createBand(band, email)).isFalse();
+		assertThat(bandService.createBand(band, email)).isEqualTo(-1);
 	}
 
 

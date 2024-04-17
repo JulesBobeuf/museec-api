@@ -60,7 +60,7 @@ public class BandService {
 	 * @param email
 	 * @return wasCreated
 	 */
-	public boolean createBand(CreateUpdateBandDto request, String email) {
+	public int createBand(CreateUpdateBandDto request, String email) {
 		Band band = CreateUpdateBandDtoToBandMapper.INSTANCE.createUpdateBandDtoToBand(request);
 		Optional<ApiUser> optionalOwner = userRepository.findById(band.getOwner());
 		Optional<ApiUser> optionalUser = userRepository.findByEmail(email);
@@ -75,10 +75,10 @@ public class BandService {
 				
 				owner.setIdBand(band.getId());
 				userRepository.save(owner);
-				return true;
+				return band.getId();
 			}
 		}
-		return false;
+		return -1;
 	}
 	
 	/**
