@@ -30,7 +30,7 @@ sonarqube:
   needs:
     - unit_tests
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'  
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME!="main"'   
   tags:
     - docker2
   allow_failure: false
