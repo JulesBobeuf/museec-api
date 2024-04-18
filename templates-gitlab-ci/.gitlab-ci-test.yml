@@ -39,3 +39,19 @@ sonarqube:
     - $GRADLE_CMD jacocoTestReport -Penv=qual
     - $GRADLE_CMD jacocoTestCoverageVerification -Penv=qual
     - $GRADLE_CMD sonar -D sonar.login=$SONARQUBE_TOKEN -Penv=qual
+
+
+sonarqube_prod:
+  stage: test
+  needs:
+    - unit_tests_prod
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME=="main"' 
+  tags:
+    - docker2
+  allow_failure: false
+  script:
+    - $GRADLE_CMD -Penv=qual clean
+    - $GRADLE_CMD jacocoTestReport -Penv=qual
+    - $GRADLE_CMD jacocoTestCoverageVerification -Penv=qual
+    - $GRADLE_CMD sonar -D sonar.login=$SONARQUBE_TOKEN -Penv=qual
