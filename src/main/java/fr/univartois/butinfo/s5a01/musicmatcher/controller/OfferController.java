@@ -139,7 +139,7 @@ public class OfferController {
 		return ResponseEntity.badRequest().body("The offer could not be updated. Bad request");
 	}
 	
-	@Operation(summary = "deleteOffer", description = "Delete an oofer", tags = { "Offer" })
+	@Operation(summary = "deleteOffer", description = "Delete an offer", tags = { "Offer" })
 	@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) })
 	@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) })
 	@DeleteMapping("/{id}")
