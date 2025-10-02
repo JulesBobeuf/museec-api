@@ -4,7 +4,7 @@
 
 ## About The Project
 
-Museec was created as part of a final university project. The API is built with Spring Boot and provides a robust backend to manage musicians, bands, and their associations. It includes different build profiles for development, quality, and production environments.
+Museec was created as part of a final university project. The API is built with Spring Boot and provides a robust backend to manage musicians, bands, and their associations. It includes different build profiles for development, quality, and production environments. 
 
 ## Built With
 
